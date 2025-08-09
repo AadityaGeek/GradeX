@@ -11,7 +11,7 @@ const poppins = Poppins({
   weight: ['400', '500', '600', '700']
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:9002';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://examease-app.vercel.app/';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
