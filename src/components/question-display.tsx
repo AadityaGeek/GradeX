@@ -8,10 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { generatePdf } from "@/lib/pdf";
 import type { GenerateQuestionsOutput, QuestionWithAnswer } from "@/ai/flows/generate-questions";
-import { Download, ListChecks, Baseline, PencilLine, FileText, Binary, Eye, EyeOff, ArrowLeft, MessageSquareQuote, Lightbulb } from "lucide-react";
+import { Download, ListChecks, Baseline, PencilLine, FileText, Binary, Eye, EyeOff, ArrowLeft, MessageSquareQuote, Lightbulb, Loader2 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useToast } from "@/hooks/use-toast";
 
 interface QuestionDisplayProps {
   questionsData: GenerateQuestionsOutput;
@@ -30,11 +31,25 @@ const iconMap: Record<string, React.ElementType> = {
 
 export function QuestionDisplay({ questionsData, title, subtitle }: QuestionDisplayProps) {
   const router = useRouter();
+  const { toast } = useToast();
   const [showAnswers, setShowAnswers] = React.useState(false);
   const [includeAnswersInPdf, setIncludeAnswersInPdf] = React.useState(false);
+  const [isGeneratingPdf, setIsGeneratingPdf] = React.useState(false);
 
-  const handleDownload = () => {
-    generatePdf(questionsData, title, subtitle, includeAnswersInPdf);
+  const handleDownload = async () => {
+    setIsGeneratingPdf(true);
+    try {
+        await generatePdf(questionsData, title, subtitle, includeAnswersInPdf);
+    } catch (error) {
+        console.error("PDF generation failed:", error);
+        toast({
+            variant: "destructive",
+            title: "PDF Generation Failed",
+            description: "Could not generate the PDF. One or more of the required images (logo, watermark) might be missing from the /public/images directory.",
+        });
+    } finally {
+        setIsGeneratingPdf(false);
+    }
   };
 
   const questionTypesWithContent = Object.keys(questionsData.questions).filter(
@@ -93,8 +108,12 @@ export function QuestionDisplay({ questionsData, title, subtitle }: QuestionDisp
                     </Label>
                 </div>
                 <div className="flex flex-col items-start sm:items-end gap-2 w-full">
-                    <Button onClick={handleDownload} variant="outline" className="w-full sm:w-auto">
-                        <Download className="mr-2 h-4 w-4" />
+                    <Button onClick={handleDownload} variant="outline" className="w-full sm:w-auto" disabled={isGeneratingPdf}>
+                         {isGeneratingPdf ? (
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                         ) : (
+                            <Download className="mr-2 h-4 w-4" />
+                         )}
                         Download PDF
                     </Button>
                     <div className="flex items-center space-x-2">
