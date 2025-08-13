@@ -97,9 +97,9 @@ export default function Home() {
           <div className="container mx-auto px-4">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div className="space-y-4">
-                <h2 className="text-3xl md:text-4xl font-bold text-primary">What is ExamEase?</h2>
+                <h2 className="text-3xl md:text-4xl font-bold text-primary">What is GradeX?</h2>
                 <p className="text-lg text-muted-foreground">
-                  ExamEase is an intelligent platform designed to revolutionize exam preparation. It moves beyond simple question generation by leveraging cutting-edge AI to create contextually aware, high-quality questions tailored to your specific curriculum. Our goal is to provide a powerful tool that not only saves educators time but also helps students learn more effectively by focusing on understanding, not just memorization.
+                  GradeX is an intelligent platform designed to revolutionize exam preparation. It moves beyond simple question generation by leveraging cutting-edge AI to create contextually aware, high-quality questions tailored to your specific curriculum. Our goal is to provide a powerful tool that not only saves educators time but also helps students learn more effectively by focusing on understanding, not just memorization.
                 </p>
                 <ul className="space-y-3 pt-4">
                   {aboutPoints.map((point, index) => (
@@ -180,7 +180,7 @@ export default function Home() {
             <p className="mt-4 text-lg text-muted-foreground">Start generating intelligent questions now.</p>
             <div className="mt-8">
               <Link href="/generate" className={cn(buttonVariants({ size: "lg" }), "transition-all hover:-translate-y-0.5")}>
-                Try ExamEase Now <Rocket className="ml-2 h-5 w-5" />
+                Try GradeX Now <Rocket className="ml-2 h-5 w-5" />
               </Link>
             </div>
           </div>

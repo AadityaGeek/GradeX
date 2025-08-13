@@ -89,12 +89,12 @@ export const generatePdf = async (
             // Fallback to text if image fails
             docInstance.setFontSize(16);
             docInstance.setFont("helvetica", "bold");
-            docInstance.text("ExamEase", MARGIN, HEADER_HEIGHT / 2 + 4);
+            docInstance.text("GradeX", MARGIN, HEADER_HEIGHT / 2 + 4);
         }
     } else {
         docInstance.setFontSize(16);
         docInstance.setFont("helvetica", "bold");
-        docInstance.text("ExamEase", MARGIN, HEADER_HEIGHT / 2 + 4);
+        docInstance.text("GradeX", MARGIN, HEADER_HEIGHT / 2 + 4);
     }
 
     // Centered Title/Subtitle

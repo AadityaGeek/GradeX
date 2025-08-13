@@ -1,9 +1,9 @@
 
-# ExamEase - AI-Powered Question Paper Generator
+# GradeX - AI-Powered Question Paper Generator
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-ExamEase is an intelligent web application designed to revolutionize how students and educators prepare for and create exams. By harnessing the power of generative AI, it automates the creation of high-quality, customized question papers based on specific curriculum requirements. This tool saves valuable time for educators and provides students with a powerful resource for targeted revision.
+GradeX is an intelligent web application designed to revolutionize how students and educators prepare for and create exams. By harnessing the power of generative AI, it automates the creation of high-quality, customized question papers based on specific curriculum requirements. This tool saves valuable time for educators and provides students with a powerful resource for targeted revision.
 
 ## ✨ Key Features
 
@@ -28,7 +28,7 @@ ExamEase is an intelligent web application designed to revolutionize how student
 
 ## 🚀 How It Works
 
-Using ExamEase is as simple as 1-2-3:
+Using GradeX is as simple as 1-2-3:
 
 1.  **Select Your Material**: Navigate to the "Generate" page and choose the desired class and subject from the dropdown menus.
 2.  **Choose Your Chapters & Questions**: Select one or more chapters you want to focus on. Then, specify the types of questions (e.g., MCQs, Short Answer) and the number you need for each.
@@ -58,8 +58,8 @@ Follow these steps to get the project running on your local machine.
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/AadityaGeek/ExamEase.git
-    cd ExamEase
+    git clone https://github.com/AadityaGeek/GradeX.git
+    cd GradeX
     ```
 
 2.  **Install dependencies:**

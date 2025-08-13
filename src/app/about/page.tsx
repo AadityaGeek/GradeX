@@ -25,7 +25,7 @@ export default function AboutPage() {
           <div className="absolute inset-0 bg-black/50 z-10"></div>
           <div className="relative z-20 container mx-auto px-4">
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight">More Than Just a Tool</h1>
-            <p className="mt-4 text-lg md:text-xl max-w-3xl mx-auto text-white/90">Discover the story, the people, and the passion behind ExamEase.</p>
+            <p className="mt-4 text-lg md:text-xl max-w-3xl mx-auto text-white/90">Discover the story, the people, and the passion behind GradeX.</p>
           </div>
         </section>
 
@@ -35,7 +35,7 @@ export default function AboutPage() {
                 <div className="space-y-4">
                     <h2 className="flex items-center gap-3 text-2xl sm:text-3xl md:text-4xl font-bold"><Users className="h-8 w-8 text-primary" /> Who Are We?</h2>
                     <p className="text-lg text-muted-foreground">
-                        At our core, we're a team of one with a big idea: that preparing for exams shouldn't be a stressful, time-consuming chore. ExamEase is the result of that idea—a smart, friendly, and powerful AI companion designed to make learning and testing more efficient and accessible for every student and educator.
+                        At our core, we're a team of one with a big idea: that preparing for exams shouldn't be a stressful, time-consuming chore. GradeX is the result of that idea—a smart, friendly, and powerful AI companion designed to make learning and testing more efficient and accessible for every student and educator.
                     </p>
                     <p className="text-lg text-muted-foreground">
                         We're not a big corporation; we're a passion project dedicated to leveraging technology for education in a meaningful way.
@@ -68,9 +68,9 @@ export default function AboutPage() {
                     />
                 </div>
                 <div className="space-y-4">
-                    <h2 className="flex items-center gap-3 text-2xl sm:text-3xl md:text-4xl font-bold"><History className="h-8 w-8 text-primary" /> Why We Built ExamEase</h2>
+                    <h2 className="flex items-center gap-3 text-2xl sm:text-3xl md:text-4xl font-bold"><History className="h-8 w-8 text-primary" /> Why We Built GradeX</h2>
                     <p className="text-lg text-muted-foreground">
-                       ExamEase started from a simple, personal frustration: "Why is it so hard to find good, relevant practice questions for a specific chapter?" I spent countless hours searching for materials during my own studies and saw a clear gap.
+                       GradeX started from a simple, personal frustration: "Why is it so hard to find good, relevant practice questions for a specific chapter?" I spent countless hours searching for materials during my own studies and saw a clear gap.
                     </p>
                      <p className="text-lg text-muted-foreground">
                        I realized AI could solve this. It could understand the curriculum, adapt to different question types, and generate a unique paper in seconds. This project was born out of the desire to build the tool I wish I had—a tool to help students focus on learning, not just searching.
@@ -121,10 +121,10 @@ export default function AboutPage() {
             </div>
         </section>
         
-        {/* Who's Behind ExamEase Section */}
+        {/* Who's Behind GradeX Section */}
         <section className="py-16 md:py-24 bg-secondary/20">
             <div className="container mx-auto px-4 text-center">
-                <h2 className="text-3xl md:text-4xl font-bold">Who's Behind ExamEase?</h2>
+                <h2 className="text-3xl md:text-4xl font-bold">Who's Behind GradeX?</h2>
                 <div className="mt-12 flex flex-col items-center">
                     <Avatar className="w-32 h-32 mb-4">
                         <AvatarImage src="https://github.com/aadityageek.png" alt="Aaditya Kumar" />
@@ -133,7 +133,7 @@ export default function AboutPage() {
                     <h3 className="text-2xl font-semibold">Aaditya Kumar</h3>
                     <p className="text-primary">Creator & Developer</p>
                     <p className="mt-4 text-lg text-muted-foreground max-w-2xl">
-                        Hi, I'm Aaditya! I'm a developer with a passion for building things that make a real difference. ExamEase is my contribution to the world of education technology, built with the hope of making the learning journey a little bit smoother for everyone.
+                        Hi, I'm Aaditya! I'm a developer with a passion for building things that make a real difference. GradeX is my contribution to the world of education technology, built with the hope of making the learning journey a little bit smoother for everyone.
                     </p>
                 </div>
             </div>

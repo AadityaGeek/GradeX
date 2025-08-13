@@ -15,22 +15,22 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://examease-app.vercel
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: 'ExamEase - AI-Powered Question Paper Generator',
-  description: 'Generate high-quality, exam-oriented question papers for any subject in seconds with ExamEase. Perfect for students and educators.',
+  title: 'GradeX - AI-Powered Question Paper Generator',
+  description: 'Generate high-quality, exam-oriented question papers for any subject in seconds with GradeX. Perfect for students and educators.',
   keywords: ['AI question generator', 'exam preparation', 'test maker', 'study tool', 'CBSE questions', 'student resources', 'educational technology'],
   authors: [{ name: 'Aaditya Kumar', url: 'https://github.com/AadityaGeek' }],
   themeColor: '#29ABE2',
   openGraph: {
-    title: 'ExamEase - AI-Powered Question Paper Generator',
+    title: 'GradeX - AI-Powered Question Paper Generator',
     description: 'Generate high-quality, exam-oriented question papers for any subject in seconds. Perfect for students and educators.',
     url: siteUrl,
-    siteName: 'ExamEase',
+    siteName: 'GradeX',
     images: [
       {
         url: '/images/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'ExamEase - AI-Powered Question Paper Generator',
+        alt: 'GradeX - AI-Powered Question Paper Generator',
       },
     ],
     locale: 'en_US',
