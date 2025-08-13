@@ -48,10 +48,17 @@ export function Header() {
                             <Image 
                                 src="/images/assets/logo.png" 
                                 alt="GradeX" 
+<<<<<<< HEAD
                                 width={30} 
                                 height={30} 
                             />
                             <span className="font-bold">GradeX</span>
+=======
+                                width={26} 
+                                height={26} 
+                            />
+                            <span className="font-bold text-xl">GradeX</span>
+>>>>>>> 7ea81aa (Rename the App)
                         </Link>
                     </div>
                     
