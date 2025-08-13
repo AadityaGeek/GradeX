@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     siteName: 'GradeX',
     images: [
       {
-        url: '/images/og-image.png',
+        url: '/images/assets/og-image.png',
         width: 1200,
         height: 630,
         alt: 'GradeX - AI-Powered Question Paper Generator',

@@ -35,7 +35,7 @@ export default function AboutPage() {
                 <div className="space-y-4">
                     <h2 className="flex items-center gap-3 text-2xl sm:text-3xl md:text-4xl font-bold"><Users className="h-8 w-8 text-primary" /> Who Are We?</h2>
                     <p className="text-lg text-muted-foreground">
-                        At our core, we're a team of one with a big idea: that preparing for exams shouldn't be a stressful, time-consuming chore. GradeX is the result of that idea—a smart, friendly, and powerful AI companion designed to make learning and testing more efficient and accessible for every student and educator.
+                        At our core, we're a team of one with a big idea: that preparing for exams shouldn't be a stressful, time-consuming chore. GradeX is the result of that idea — a smart, friendly, and powerful AI companion designed to make learning and testing more efficient and accessible for every student and educator.
                     </p>
                     <p className="text-lg text-muted-foreground">
                         We're not a big corporation; we're a passion project dedicated to leveraging technology for education in a meaningful way.
@@ -70,10 +70,10 @@ export default function AboutPage() {
                 <div className="space-y-4">
                     <h2 className="flex items-center gap-3 text-2xl sm:text-3xl md:text-4xl font-bold"><History className="h-8 w-8 text-primary" /> Why We Built GradeX</h2>
                     <p className="text-lg text-muted-foreground">
-                       GradeX started from a simple, personal frustration: "Why is it so hard to find good, relevant practice questions for a specific chapter?" I spent countless hours searching for materials during my own studies and saw a clear gap.
+                       GradeX started from a simple, personal frustration: <span className="italic">"Why is it so hard to find good, relevant practice questions for a specific chapter?"</span> I spent countless hours searching for materials during my own studies and saw a clear gap.
                     </p>
                      <p className="text-lg text-muted-foreground">
-                       I realized AI could solve this. It could understand the curriculum, adapt to different question types, and generate a unique paper in seconds. This project was born out of the desire to build the tool I wish I had—a tool to help students focus on learning, not just searching.
+                       I realized AI could solve this. It could understand the curriculum, adapt to different question types, and generate a unique paper in seconds. This project was born out of the desire to build the tool I wish I had — a tool to help students focus on learning, not just searching.
                     </p>
                 </div>
             </div>
@@ -132,7 +132,7 @@ export default function AboutPage() {
                     </Avatar>
                     <h3 className="text-2xl font-semibold">Aaditya Kumar</h3>
                     <p className="text-primary">Creator & Developer</p>
-                    <p className="mt-4 text-lg text-muted-foreground max-w-2xl">
+                    <p className="mt-4 text-lg text-muted-foreground max-w-2xl italic">
                         Hi, I'm Aaditya! I'm a developer with a passion for building things that make a real difference. GradeX is my contribution to the world of education technology, built with the hope of making the learning journey a little bit smoother for everyone.
                     </p>
                 </div>

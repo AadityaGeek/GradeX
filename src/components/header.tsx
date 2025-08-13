@@ -3,6 +3,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Bot, Home, Rocket, Info, Mail, Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -43,7 +44,13 @@ export function Header() {
                 <div className="container flex h-14 items-center">
                     <div className="mr-4 flex items-center">
                         <Link href="/" className="mr-6 flex items-center space-x-2">
-                            <Bot className="h-6 w-6 text-primary" />
+                            {/* <Bot className="h-6 w-6 text-primary" /> */}
+                            <Image 
+                                src="/images/assets/logo.png" 
+                                alt="GradeX" 
+                                width={30} 
+                                height={30} 
+                            />
                             <span className="font-bold">GradeX</span>
                         </Link>
                     </div>

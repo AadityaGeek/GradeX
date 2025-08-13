@@ -47,9 +47,9 @@ export const generatePdf = async (
   const EXPLANATION_COLOR = "#4b5563";
 
   // Fetch logo and watermark images.
-  // IMPORTANT: Ensure 'logo.png' and 'watermark.png' exist in the /public/images/ directory.
-  const logoImageBase64 = await fetchImageAsBase64('/images/logo.png');
-  const watermarkImageBase64 = await fetchImageAsBase64('/images/watermark.png');
+  // IMPORTANT: Ensure 'pdf-logo.png' and 'pdf-watermark.png' exist in the /public/images/ directory.
+  const logoImageBase64 = await fetchImageAsBase64('/images/assets/pdf-logo.png');
+  const watermarkImageBase64 = await fetchImageAsBase64('/images/assets/pdf-watermark.png');
 
 
   // --- Reusable Header, Footer, and Watermark Functions ---
