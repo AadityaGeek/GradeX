@@ -33,40 +33,37 @@ export default function LoginPage() {
       const result = await signInWithPopup(auth, provider);
       const loggedInUser = result.user;
 
-      // Wait for 5 seconds before saving the profile
-      setTimeout(async () => {
-        try {
-          const userDocRef = doc(firestore, "users", loggedInUser.uid);
-          const userDoc = await getDoc(userDocRef);
+      // Create or update user profile in Firestore
+      try {
+        const userDocRef = doc(firestore, "users", loggedInUser.uid);
+        const userDoc = await getDoc(userDocRef);
 
-          if (!userDoc.exists()) {
-            // New user
-            await setDoc(userDocRef, {
-                uid: loggedInUser.uid,
-                displayName: loggedInUser.displayName,
-                email: loggedInUser.email,
-                photoURL: loggedInUser.photoURL,
-                totalGenerations: 0,
-                createdAt: serverTimestamp(),
-            });
-          } else {
-            // Returning user, just update their profile info in case it changed
-            await setDoc(userDocRef, {
-                displayName: loggedInUser.displayName,
-                photoURL: loggedInUser.photoURL,
-                lastLogin: serverTimestamp(),
-            }, { merge: true });
-          }
-        } catch (dbError) {
-          console.error('Error writing to Firestore: ', dbError);
-           toast({
-            variant: 'destructive',
-            title: 'Database Error',
-            description: 'Could not save your profile. Please try again.',
+        if (!userDoc.exists()) {
+          // New user
+          await setDoc(userDocRef, {
+              uid: loggedInUser.uid,
+              displayName: loggedInUser.displayName,
+              email: loggedInUser.email,
+              photoURL: loggedInUser.photoURL,
+              totalGenerations: 0,
+              createdAt: serverTimestamp(),
           });
+        } else {
+          // Returning user, just update their profile info in case it changed
+          await setDoc(userDocRef, {
+              displayName: loggedInUser.displayName,
+              photoURL: loggedInUser.photoURL,
+              lastLogin: serverTimestamp(),
+          }, { merge: true });
         }
-      }, 5000);
-
+      } catch (dbError) {
+        console.error('Error writing to Firestore: ', dbError);
+         toast({
+          variant: 'destructive',
+          title: 'Database Error',
+          description: 'Could not save your profile. Please try again.',
+        });
+      }
 
       toast({
         title: 'Success!',
