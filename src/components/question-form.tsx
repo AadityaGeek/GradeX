@@ -21,11 +21,16 @@ import { type Chapter, type Class, type Subject, getClasses, getSubjects, getCha
 import { QUESTION_TYPES, questionFormSchema, type QuestionFormSchema } from "@/lib/schemas";
 import { Loader2 } from "lucide-react";
 import { ReviewDialog } from "./review-dialog";
+import { useUser } from "@/firebase/auth/use-user";
+import { useFirebase } from "@/firebase/client-provider";
+import { doc, increment, writeBatch } from "firebase/firestore";
 
 export function QuestionForm() {
   const { toast } = useToast();
   const router = useRouter();
   const [isPending, startTransition] = React.useTransition();
+  const { user } = useUser();
+  const { firestore } = useFirebase();
 
   const [classes, setClasses] = React.useState<Pick<Class, "id" | "name">[]>([]);
   const [subjects, setSubjects] = React.useState<Pick<Subject, "id" | "name">[]>([]);
@@ -74,20 +79,41 @@ export function QuestionForm() {
   }, [watchedClassId, watchedSubjectId, form, fetchChapters]);
 
   const onSubmit = (formData: QuestionFormSchema) => {
+    if (!user) {
+        toast({
+            variant: "destructive",
+            title: "Authentication Error",
+            description: "You must be logged in to generate questions.",
+        });
+        router.push('/login');
+        return;
+    }
+    if ((user.generationsRemaining ?? 0) <= 0) {
+        toast({
+            variant: "destructive",
+            title: "No Generations Left",
+            description: "You have used all your free generations. Please upgrade for more.",
+        });
+        return;
+    }
     setReviewData(formData);
   };
   
   const handleConfirm = () => {
-    if (!reviewData) return;
+    if (!reviewData || !user) return;
 
     startTransition(async () => {
       const result = await createQuestionPaper(reviewData);
       if (result.success && result.data) {
+        // Decrement generationsRemaining on successful generation
+        const userDocRef = doc(firestore, "users", user.uid);
+        const batch = writeBatch(firestore);
+        batch.update(userDocRef, { generationsRemaining: increment(-1) });
+        await batch.commit();
+
         sessionStorage.setItem("questionPaperData", JSON.stringify(result.data));
         toast({ title: "Success!", description: "Your questions have been generated." });
-        setTimeout(() => {
-            router.push("/questions");
-        }, 2000); // 2-second delay
+        router.push("/questions");
       } else {
         toast({ variant: "destructive", title: "Error", description: result.error });
         setReviewData(null);
@@ -127,8 +153,8 @@ export function QuestionForm() {
             isOpen={!!reviewData}
             onClose={() => setReviewData(null)}
             onConfirm={handleConfirm}
-            formData={reviewData}
             isPending={isPending}
+            formData={reviewData}
             classAndSubject={{
               className: classes.find(c => c.id === reviewData.classId)?.name || '',
               subjectName: subjects.find(s => s.id === reviewData.subjectId)?.name || '',
@@ -326,7 +352,7 @@ export function QuestionForm() {
 
 
               <CardFooter className="px-0 pt-8">
-                <Button type="submit" disabled={isPending} className="w-full md:w-auto">
+                <Button type="submit" disabled={isPending || !user} className="w-full md:w-auto">
                   {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   {isPending ? "Generating..." : "Generate Questions"}
                 </Button>
@@ -338,6 +364,8 @@ export function QuestionForm() {
     </>
   );
 }
+    
+
     
 
     
