@@ -10,9 +10,10 @@ import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import Image from 'next/image';
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 
 export default function LoginPage() {
-  const { auth } = useFirebase();
+  const { auth, firestore } = useFirebase();
   const { user, loading } = useUser();
   const router = useRouter();
   const { toast } = useToast();
@@ -28,7 +29,32 @@ export default function LoginPage() {
     setIsSigningIn(true);
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      const loggedInUser = result.user;
+
+      // Create or update user profile in Firestore
+      const userDocRef = doc(firestore, "users", loggedInUser.uid);
+      const userDoc = await getDoc(userDocRef);
+
+      if (!userDoc.exists()) {
+        // New user
+        await setDoc(userDocRef, {
+            uid: loggedInUser.uid,
+            displayName: loggedInUser.displayName,
+            email: loggedInUser.email,
+            photoURL: loggedInUser.photoURL,
+            totalGenerations: 0,
+            createdAt: serverTimestamp(),
+        });
+      } else {
+        // Returning user, just update their profile info in case it changed
+        await setDoc(userDocRef, {
+            displayName: loggedInUser.displayName,
+            photoURL: loggedInUser.photoURL,
+            lastLogin: serverTimestamp(),
+        }, { merge: true });
+      }
+
       toast({
         title: 'Success!',
         description: 'You have successfully logged in.',
@@ -41,6 +67,7 @@ export default function LoginPage() {
         title: 'Login Failed',
         description: 'Could not sign you in with Google. Please try again.',
       });
+    } finally {
       setIsSigningIn(false);
     }
   };
