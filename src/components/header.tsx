@@ -4,13 +4,23 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Bot, Home, Rocket, Info, Mail, Menu, X, LogOut, Loader2, Star } from "lucide-react";
+import { Bot, Home, Rocket, Info, Mail, Menu, X, LogOut, Loader2, Star, User as UserIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "./ui/button";
 import { useUser } from "@/firebase/auth/use-user";
 import { useFirebase } from "@/firebase/client-provider";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,6 +44,7 @@ export function Header() {
     const { auth } = useFirebase();
     const { user, loading } = useUser();
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+    const [isLogoutAlertOpen, setIsLogoutAlertOpen] = React.useState(false);
 
     React.useEffect(() => {
         if (isMenuOpen) {
@@ -55,6 +66,7 @@ export function Header() {
     const handleLogout = async () => {
         await auth.signOut();
         router.push('/');
+        setIsLogoutAlertOpen(false);
     };
 
 
@@ -65,6 +77,7 @@ export function Header() {
 
       if (user) {
         return (
+         <>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar className="cursor-pointer h-8 w-8">
@@ -75,6 +88,12 @@ export function Header() {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>{user.displayName}</DropdownMenuLabel>
               <DropdownMenuSeparator />
+               <DropdownMenuItem asChild className="cursor-pointer">
+                  <Link href="/profile">
+                    <UserIcon className="mr-2 h-4 w-4" />
+                    <span>Profile</span>
+                  </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem className="focus:bg-transparent cursor-default">
                   <div className="flex items-center justify-between w-full">
                     <span className="flex items-center">
@@ -85,12 +104,27 @@ export function Header() {
                   </div>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+              <DropdownMenuItem onClick={() => setIsLogoutAlertOpen(true)} className="cursor-pointer">
                 <LogOut className="mr-2 h-4 w-4" />
                 <span>Log out</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          <AlertDialog open={isLogoutAlertOpen} onOpenChange={setIsLogoutAlertOpen}>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>Are you sure you want to log out?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        You will be returned to the homepage. You can always log back in later.
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleLogout}>Log Out</AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+      </>
         );
       }
 
