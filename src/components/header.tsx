@@ -4,7 +4,7 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Bot, Home, Rocket, Info, Mail, Menu, X, LogOut, Loader2 } from "lucide-react";
+import { Bot, Home, Rocket, Info, Mail, Menu, X, LogOut, Loader2, Star } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "./ui/button";
@@ -72,6 +72,16 @@ export function Header() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>{user.displayName}</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="focus:bg-transparent cursor-default">
+                  <div className="flex items-center justify-between w-full">
+                    <span className="flex items-center">
+                        <Star className="mr-2 h-4 w-4 text-yellow-500" />
+                        Credits
+                    </span>
+                    <span>{user.generationsRemaining ?? 0}</span>
+                  </div>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
                 <LogOut className="mr-2 h-4 w-4" />

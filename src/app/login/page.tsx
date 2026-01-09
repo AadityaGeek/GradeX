@@ -45,7 +45,7 @@ export default function LoginPage() {
               displayName: loggedInUser.displayName,
               email: loggedInUser.email,
               photoURL: loggedInUser.photoURL,
-              totalGenerations: 0,
+              generationsRemaining: 5,
               createdAt: serverTimestamp(),
           });
         } else {
