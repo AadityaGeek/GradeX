@@ -4,7 +4,7 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Bot, Home, Rocket, Info, Mail, Menu, X, LogOut, Loader2, Star, User as UserIcon } from "lucide-react";
+import { Bot, Home, Rocket, Info, Mail, Menu, X, LogOut, Loader2, Star, User as UserIcon, Diamond } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "./ui/button";
@@ -34,6 +34,7 @@ import {
 const navLinks = [
     { href: "/", label: "Home", icon: <Home /> },
     { href: "/generate", label: "Generate", icon: <Rocket /> },
+    { href: "/pricing", label: "Pricing", icon: <Diamond /> },
     { href: "/about", label: "About", icon: <Info /> },
     { href: "/#contact", label: "Contact", icon: <Mail /> },
 ];
@@ -100,7 +101,7 @@ export function Header() {
                         <Star className="mr-2 h-4 w-4 text-yellow-500" />
                         Credits
                     </span>
-                    <span>{user.generationsRemaining ?? 0}</span>
+                    <span>{user.planId === 'premium' ? 'Unlimited' : user.generationsRemaining ?? 0}</span>
                   </div>
               </DropdownMenuItem>
               <DropdownMenuSeparator />

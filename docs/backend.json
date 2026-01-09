@@ -27,9 +27,14 @@
         "generationsRemaining": {
             "type": "number",
             "description": "The number of question paper generations the user has left."
+        },
+        "planId": {
+          "type": "string",
+          "description": "The ID of the user's current subscription plan.",
+          "enum": ["free", "basic", "pro", "premium"]
         }
       },
-      "required": ["uid", "email", "generationsRemaining"]
+      "required": ["uid", "email", "generationsRemaining", "planId"]
     }
   },
   "auth": {
