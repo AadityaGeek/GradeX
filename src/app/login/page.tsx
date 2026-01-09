@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -32,28 +33,40 @@ export default function LoginPage() {
       const result = await signInWithPopup(auth, provider);
       const loggedInUser = result.user;
 
-      // Create or update user profile in Firestore
-      const userDocRef = doc(firestore, "users", loggedInUser.uid);
-      const userDoc = await getDoc(userDocRef);
+      // Wait for 5 seconds before saving the profile
+      setTimeout(async () => {
+        try {
+          const userDocRef = doc(firestore, "users", loggedInUser.uid);
+          const userDoc = await getDoc(userDocRef);
 
-      if (!userDoc.exists()) {
-        // New user
-        await setDoc(userDocRef, {
-            uid: loggedInUser.uid,
-            displayName: loggedInUser.displayName,
-            email: loggedInUser.email,
-            photoURL: loggedInUser.photoURL,
-            totalGenerations: 0,
-            createdAt: serverTimestamp(),
-        });
-      } else {
-        // Returning user, just update their profile info in case it changed
-        await setDoc(userDocRef, {
-            displayName: loggedInUser.displayName,
-            photoURL: loggedInUser.photoURL,
-            lastLogin: serverTimestamp(),
-        }, { merge: true });
-      }
+          if (!userDoc.exists()) {
+            // New user
+            await setDoc(userDocRef, {
+                uid: loggedInUser.uid,
+                displayName: loggedInUser.displayName,
+                email: loggedInUser.email,
+                photoURL: loggedInUser.photoURL,
+                totalGenerations: 0,
+                createdAt: serverTimestamp(),
+            });
+          } else {
+            // Returning user, just update their profile info in case it changed
+            await setDoc(userDocRef, {
+                displayName: loggedInUser.displayName,
+                photoURL: loggedInUser.photoURL,
+                lastLogin: serverTimestamp(),
+            }, { merge: true });
+          }
+        } catch (dbError) {
+          console.error('Error writing to Firestore: ', dbError);
+           toast({
+            variant: 'destructive',
+            title: 'Database Error',
+            description: 'Could not save your profile. Please try again.',
+          });
+        }
+      }, 5000);
+
 
       toast({
         title: 'Success!',
