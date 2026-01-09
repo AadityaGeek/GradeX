@@ -5,7 +5,7 @@ import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Bot, Home, Rocket, Info, Mail, Menu, X, LogOut, Loader2, Star } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "./ui/button";
 import { useUser } from "@/firebase/auth/use-user";
@@ -30,6 +30,7 @@ const navLinks = [
 
 export function Header() {
     const pathname = usePathname();
+    const router = useRouter();
     const { auth } = useFirebase();
     const { user, loading } = useUser();
     const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -53,6 +54,7 @@ export function Header() {
 
     const handleLogout = async () => {
         await auth.signOut();
+        router.push('/');
     };
 
 
