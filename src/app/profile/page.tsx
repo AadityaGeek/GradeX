@@ -69,12 +69,12 @@ export default function ProfilePage() {
                 <div className="flex items-center justify-between rounded-lg border p-4">
                     <div className="flex items-center gap-3">
                         <Star className="h-6 w-6 text-primary" />
-                        <span className="font-semibold">Generations Remaining</span>
+                        <span className="font-semibold">Credits Remaining</span>
                     </div>
                     <span className="text-xl font-bold text-primary">{user.planId === 'premium' ? 'Unlimited' : (user.generationsRemaining ?? 0)}</span>
                 </div>
                  <div className="text-center text-sm text-muted-foreground">
-                    This is the number of question papers you can generate.
+                    You use 1 credit for every 10 questions generated.
                 </div>
                 <div className="flex justify-center items-center gap-4 pt-4">
                     <Button asChild>

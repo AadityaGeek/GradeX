@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useFirebase } from "@/firebase/client-provider";
 import { useToast } from "@/hooks/use-toast";
+import { PLANS } from "@/lib/data";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { Home, Loader2, LogIn } from "lucide-react";
@@ -36,6 +37,8 @@ export function AuthRedirectDialog() {
       try {
         const userDocRef = doc(firestore, "users", loggedInUser.uid);
         const userDoc = await getDoc(userDocRef);
+        const freePlan = PLANS.find(p => p.id === 'free');
+        const freePlanGenerations = freePlan ? freePlan.generations : 50;
 
         if (!userDoc.exists()) {
           // New user
@@ -45,7 +48,7 @@ export function AuthRedirectDialog() {
             email: loggedInUser.email,
             photoURL: loggedInUser.photoURL,
             planId: 'free',
-            generationsRemaining: 5,
+            generationsRemaining: freePlanGenerations,
             createdAt: serverTimestamp(),
           });
         } else {

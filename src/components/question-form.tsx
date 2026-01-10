@@ -88,11 +88,24 @@ export function QuestionForm() {
         router.push('/login');
         return;
     }
-    if ((user.generationsRemaining ?? 0) <= 0) {
+    
+    const totalQuestions = formData.questionTypes.reduce((sum, qt) => sum + qt.count, 0);
+    const cost = Math.ceil(totalQuestions / 10);
+    
+    if (user.planId !== 'premium' && (user.generationsRemaining ?? 0) < cost) {
         toast({
             variant: "destructive",
-            title: "No Generations Left",
-            description: "You have used all your free generations. Please upgrade for more.",
+            title: "Not Enough Credits",
+            description: `This generation costs ${cost} credits, but you only have ${user.generationsRemaining ?? 0}. Please upgrade your plan.`,
+        });
+        return;
+    }
+    
+    if ((user.generationsRemaining ?? 0) <= 0 && user.planId !== 'premium') {
+        toast({
+            variant: "destructive",
+            title: "No Credits Left",
+            description: "You have used all your credits. Please upgrade your plan for more.",
         });
         return;
     }
@@ -106,10 +119,13 @@ export function QuestionForm() {
       const result = await createQuestionPaper(reviewData);
       if (result.success && result.data) {
         // Decrement generationsRemaining on successful generation
-        if (user.planId === 'free') {
+        if (user.planId !== 'premium') {
+            const totalQuestions = reviewData.questionTypes.reduce((sum, qt) => sum + qt.count, 0);
+            const cost = Math.ceil(totalQuestions / 10);
+            
             const userDocRef = doc(firestore, "users", user.uid);
             const batch = writeBatch(firestore);
-            batch.update(userDocRef, { generationsRemaining: increment(-1) });
+            batch.update(userDocRef, { generationsRemaining: increment(-cost) });
             await batch.commit();
         }
 
@@ -392,4 +408,3 @@ export function QuestionForm() {
     
 
     
-

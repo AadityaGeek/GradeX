@@ -12,6 +12,7 @@ import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import Image from 'next/image';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
+import { PLANS } from '@/lib/data';
 
 export default function LoginPage() {
   const { auth, firestore } = useFirebase();
@@ -37,6 +38,8 @@ export default function LoginPage() {
       try {
         const userDocRef = doc(firestore, "users", loggedInUser.uid);
         const userDoc = await getDoc(userDocRef);
+        const freePlan = PLANS.find(p => p.id === 'free');
+        const freePlanGenerations = freePlan ? freePlan.generations : 50;
 
         if (!userDoc.exists()) {
           // New user
@@ -46,7 +49,7 @@ export default function LoginPage() {
               email: loggedInUser.email,
               photoURL: loggedInUser.photoURL,
               planId: 'free',
-              generationsRemaining: 5,
+              generationsRemaining: freePlanGenerations,
               createdAt: serverTimestamp(),
           });
         } else {
