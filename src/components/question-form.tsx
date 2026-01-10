@@ -1,4 +1,3 @@
-
       "use client";
 
 import * as React from "react";
@@ -19,11 +18,12 @@ import { useToast } from "@/hooks/use-toast";
 import { createQuestionPaper } from "@/app/actions";
 import { type Chapter, type Class, type Subject, getClasses, getSubjects, getChapters } from "@/lib/data";
 import { QUESTION_TYPES, questionFormSchema, type QuestionFormSchema } from "@/lib/schemas";
-import { Loader2 } from "lucide-react";
+import { Loader2, Lock } from "lucide-react";
 import { ReviewDialog } from "./review-dialog";
 import { useUser } from "@/firebase/auth/use-user";
 import { useFirebase } from "@/firebase/client-provider";
 import { doc, increment, writeBatch } from "firebase/firestore";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 
 export function QuestionForm() {
   const { toast } = useToast();
@@ -106,10 +106,12 @@ export function QuestionForm() {
       const result = await createQuestionPaper(reviewData);
       if (result.success && result.data) {
         // Decrement generationsRemaining on successful generation
-        const userDocRef = doc(firestore, "users", user.uid);
-        const batch = writeBatch(firestore);
-        batch.update(userDocRef, { generationsRemaining: increment(-1) });
-        await batch.commit();
+        if (user.planId === 'free') {
+            const userDocRef = doc(firestore, "users", user.uid);
+            const batch = writeBatch(firestore);
+            batch.update(userDocRef, { generationsRemaining: increment(-1) });
+            await batch.commit();
+        }
 
         sessionStorage.setItem("questionPaperData", JSON.stringify(result.data));
         toast({ title: "Success!", description: "Your questions have been generated." });
@@ -298,54 +300,75 @@ export function QuestionForm() {
                       <Label className="text-base">Question Types</Label>
                       <FormMessage className="ml-2" />
                     </div>
-                    <div className="space-y-4">
-                      {QUESTION_TYPES.map((type) => {
-                        const isSelected = field.value.some((q) => q.id === type.id);
-                        return (
-                          <motion.div
-                            key={type.id}
-                            layout
-                            className="flex flex-row items-center justify-between p-3 bg-secondary/50 rounded-lg"
-                          >
-                            <Label className="font-normal flex items-center space-x-2 cursor-pointer">
-                              <Checkbox
-                                checked={isSelected}
-                                onCheckedChange={(checked) => {
-                                  const currentValues = field.value || [];
-                                  if (checked) {
-                                    field.onChange([...currentValues, { id: type.id, type: type.name, count: 5 }]);
-                                  } else {
-                                    field.onChange(currentValues.filter((q) => q.id !== type.id));
-                                  }
-                                }}
-                              />
-                              <span>{type.name}</span>
-                            </Label>
-                            <motion.div
-                              animate={{
-                                opacity: isSelected ? 1 : 0,
-                              }}
-                              transition={{ duration: 0.2 }}
-                              className={!isSelected ? "invisible pointer-events-none" : ""}
-                            >
-                              <Input
-                                type="number"
-                                value={field.value.find((q) => q.id === type.id)?.count || 0}
-                                onChange={(e) => {
-                                  const newCount = parseInt(e.target.value, 10) || 0;
-                                  const newQuestionTypes = field.value.map((q) =>
-                                    q.id === type.id ? { ...q, count: newCount } : q
-                                  );
-                                  field.onChange(newQuestionTypes);
-                                }}
-                                className="h-8 w-24 text-center"
-                                disabled={!isSelected}
-                              />
-                            </motion.div>
-                          </motion.div>
-                        );
-                      })}
-                    </div>
+                     <TooltipProvider>
+                        <div className="space-y-4">
+                        {QUESTION_TYPES.map((type) => {
+                            const isSelected = field.value.some((q) => q.id === type.id);
+                            const isLocked = user?.planId === 'free' && type.isPremium;
+
+                            const content = (
+                                <motion.div
+                                key={type.id}
+                                layout
+                                className="flex flex-row items-center justify-between p-3 bg-secondary/50 rounded-lg"
+                                >
+                                <Label className="font-normal flex items-center space-x-2 cursor-pointer">
+                                    <Checkbox
+                                    checked={isSelected}
+                                    disabled={isLocked}
+                                    onCheckedChange={(checked) => {
+                                        const currentValues = field.value || [];
+                                        if (checked) {
+                                        field.onChange([...currentValues, { id: type.id, type: type.name, count: 5 }]);
+                                        } else {
+                                        field.onChange(currentValues.filter((q) => q.id !== type.id));
+                                        }
+                                    }}
+                                    />
+                                    <span>{type.name}</span>
+                                    {isLocked && <Lock className="h-4 w-4 text-muted-foreground" />}
+                                </Label>
+                                <motion.div
+                                    animate={{
+                                    opacity: isSelected ? 1 : 0,
+                                    }}
+                                    transition={{ duration: 0.2 }}
+                                    className={!isSelected ? "invisible pointer-events-none" : ""}
+                                >
+                                    <Input
+                                    type="number"
+                                    value={field.value.find((q) => q.id === type.id)?.count || 0}
+                                    onChange={(e) => {
+                                        const newCount = parseInt(e.target.value, 10) || 0;
+                                        const newQuestionTypes = field.value.map((q) =>
+                                        q.id === type.id ? { ...q, count: newCount } : q
+                                        );
+                                        field.onChange(newQuestionTypes);
+                                    }}
+                                    className="h-8 w-24 text-center"
+                                    disabled={!isSelected}
+                                    />
+                                </motion.div>
+                                </motion.div>
+                            );
+
+                            if (isLocked) {
+                                return (
+                                <Tooltip key={type.id}>
+                                    <TooltipTrigger asChild>
+                                    <div className="cursor-not-allowed">{content}</div>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                    <p>Upgrade to a paid plan to use this question type.</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                                );
+                            }
+
+                            return content;
+                        })}
+                        </div>
+                    </TooltipProvider>
                   </FormItem>
                 )}
               />
@@ -369,3 +392,4 @@ export function QuestionForm() {
     
 
     
+
