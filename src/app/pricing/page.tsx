@@ -50,6 +50,30 @@ export default function PricingPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {PLANS.map((plan) => {
                 const isCurrentPlan = user?.planId === plan.id;
+
+                const getButton = () => {
+                  if (isCurrentPlan) {
+                    return (
+                      <Button disabled className="w-full">
+                        Current Plan
+                      </Button>
+                    );
+                  }
+                  if (!user) {
+                    return (
+                      <Button asChild className="w-full">
+                        <Link href="/login">Get Started</Link>
+                      </Button>
+                    );
+                  }
+                  // For logged-in users, on a plan they are not on
+                  return (
+                    <Button onClick={handleChoosePlan} className={cn("w-full", plan.id !== 'basic' && "bg-secondary text-secondary-foreground hover:bg-secondary/80")}>
+                      Upgrade
+                    </Button>
+                  );
+                };
+                
                 return (
                   <Card
                     key={plan.id}
@@ -77,15 +101,7 @@ export default function PricingPage() {
                       </ul>
                     </CardContent>
                     <CardFooter>
-                      {isCurrentPlan ? (
-                          <Button disabled className="w-full">
-                              Current Plan
-                          </Button>
-                      ) : (
-                          <Button onClick={handleChoosePlan} className={cn("w-full", !plan.isFeatured && "bg-secondary text-secondary-foreground hover:bg-secondary/80")}>
-                              {user ? 'Upgrade' : 'Get Started'}
-                          </Button>
-                      )}
+                      {getButton()}
                     </CardFooter>
                   </Card>
                 );
