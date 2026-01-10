@@ -48,49 +48,48 @@ export default function PricingPage() {
         <section className="pb-16 md:pb-24">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {PLANS.map((plan) => (
-                <Card
-                  key={plan.id}
-                  className={cn(
-                    'flex flex-col shadow-lg transition-all duration-300 hover:shadow-primary/20 hover:-translate-y-1',
-                    plan.isFeatured && 'border-2 border-primary shadow-primary/20',
-                    plan.id === user?.planId && 'ring-2 ring-primary'
-                  )}
-                >
-                  <CardHeader className="text-center">
-                    <CardTitle className="text-2xl font-bold flex items-center justify-center gap-2">
-                        {plan.name === "Premium" && <Diamond className="text-primary"/>}
-                        {plan.name}
-                    </CardTitle>
-                    <CardDescription>{plan.price} <span className="text-xs">{plan.priceDetails}</span></CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex-grow">
-                    <ul className="space-y-4">
-                      {plan.features.map((feature, index) => (
-                        <li key={index} className="flex items-start gap-3">
-                          <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                          <span className="text-sm">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                  <CardFooter>
-                    {user?.planId === plan.id ? (
-                        <Button disabled className="w-full">
-                            Current Plan
-                        </Button>
-                    ) : plan.id === 'free' ? (
-                        <Button onClick={handleChoosePlan} className="w-full">
-                            Get Started
-                        </Button>
-                    ) : (
-                         <Button onClick={handleChoosePlan} className={cn("w-full", !plan.isFeatured && "bg-secondary text-secondary-foreground hover:bg-secondary/80")}>
-                            {user ? 'Upgrade' : 'Get Started'}
-                        </Button>
+              {PLANS.map((plan) => {
+                const isCurrentPlan = user?.planId === plan.id;
+                return (
+                  <Card
+                    key={plan.id}
+                    className={cn(
+                      'flex flex-col shadow-lg transition-all duration-300 hover:shadow-primary/20 hover:-translate-y-1',
+                      isCurrentPlan && 'border-2 border-primary shadow-primary/20',
+                      plan.isFeatured && !isCurrentPlan && 'border-2 border-border'
                     )}
-                  </CardFooter>
-                </Card>
-              ))}
+                  >
+                    <CardHeader className="text-center">
+                      <CardTitle className="text-2xl font-bold flex items-center justify-center gap-2">
+                          {plan.name === "Premium" && <Diamond className="text-primary"/>}
+                          {plan.name}
+                      </CardTitle>
+                      <CardDescription>{plan.price} <span className="text-xs">{plan.priceDetails}</span></CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex-grow">
+                      <ul className="space-y-4">
+                        {plan.features.map((feature, index) => (
+                          <li key={index} className="flex items-start gap-3">
+                            <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                            <span className="text-sm">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                    <CardFooter>
+                      {isCurrentPlan ? (
+                          <Button disabled className="w-full">
+                              Current Plan
+                          </Button>
+                      ) : (
+                          <Button onClick={handleChoosePlan} className={cn("w-full", !plan.isFeatured && "bg-secondary text-secondary-foreground hover:bg-secondary/80")}>
+                              {user ? 'Upgrade' : 'Get Started'}
+                          </Button>
+                      )}
+                    </CardFooter>
+                  </Card>
+                );
+              })}
             </div>
              {!user && (
                 <div className="mt-12 text-center">
