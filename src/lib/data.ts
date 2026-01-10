@@ -6,7 +6,7 @@ export const PLANS: Plan[] = [
   {
     id: 'free',
     name: 'Free',
-    price: '$0',
+    price: '₹0',
     priceDetails: 'per month',
     generations: 5,
     features: [
@@ -19,7 +19,7 @@ export const PLANS: Plan[] = [
   {
     id: 'basic',
     name: 'Basic',
-    price: '$5',
+    price: '₹449',
     priceDetails: 'per month',
     generations: 25,
     features: [
@@ -33,7 +33,7 @@ export const PLANS: Plan[] = [
   {
     id: 'pro',
     name: 'Pro',
-    price: '$15',
+    price: '₹1,299',
     priceDetails: 'per month',
     generations: 100,
     features: [
@@ -46,7 +46,7 @@ export const PLANS: Plan[] = [
   {
     id: 'premium',
     name: 'Premium',
-    price: '$30',
+    price: '₹2,499',
     priceDetails: 'per month',
     generations: Infinity,
     features: [
