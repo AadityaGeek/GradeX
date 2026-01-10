@@ -313,7 +313,7 @@ export function QuestionForm() {
                                 onCheckedChange={(checked) => {
                                   const currentValues = field.value || [];
                                   if (checked) {
-                                    field.onChange([...currentValues, { id: type.id, type: type.name, count: 10 }]);
+                                    field.onChange([...currentValues, { id: type.id, type: type.name, count: 5 }]);
                                   } else {
                                     field.onChange(currentValues.filter((q) => q.id !== type.id));
                                   }
