@@ -76,8 +76,12 @@ export default function PricingPage() {
                   </CardContent>
                   <CardFooter>
                     {user?.planId === plan.id ? (
-                         <Button disabled className="w-full">
+                        <Button disabled className="w-full">
                             Current Plan
+                        </Button>
+                    ) : plan.id === 'free' ? (
+                        <Button onClick={handleChoosePlan} className="w-full">
+                            Get Started
                         </Button>
                     ) : (
                          <Button onClick={handleChoosePlan} className={cn("w-full", !plan.isFeatured && "bg-secondary text-secondary-foreground hover:bg-secondary/80")}>
