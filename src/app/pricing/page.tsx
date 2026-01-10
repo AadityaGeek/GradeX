@@ -66,9 +66,13 @@ export default function PricingPage() {
                       </Button>
                     );
                   }
+                   if (plan.id === 'free') {
+                     // A logged-in user can't "get" the free plan again
+                     return null; 
+                   }
                   // For logged-in users, on a plan they are not on
                   return (
-                    <Button onClick={handleChoosePlan} className={cn("w-full", plan.id !== 'basic' && "bg-secondary text-secondary-foreground hover:bg-secondary/80")}>
+                    <Button onClick={handleChoosePlan} className="w-full">
                       Upgrade
                     </Button>
                   );
@@ -80,7 +84,6 @@ export default function PricingPage() {
                     className={cn(
                       'flex flex-col shadow-lg transition-all duration-300 hover:shadow-primary/20 hover:-translate-y-1',
                       isCurrentPlan && 'border-2 border-primary shadow-primary/20',
-                      plan.isFeatured && !isCurrentPlan && 'border-2 border-border'
                     )}
                   >
                     <CardHeader className="text-center">
