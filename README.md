@@ -36,7 +36,7 @@ Using GradeX is as simple as 1-2-3:
 
 ## 🛠️ Tech Stack
 
-- **Framework**: [Next.js 15](https://nextjs.org/) (with App Router)
+- **Framework**: [Next.js 16](https://nextjs.org/) (with App Router)
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
 - **AI Integration**: [Genkit (Google's Generative AI Toolkit)](https://firebase.google.com/docs/genkit)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
