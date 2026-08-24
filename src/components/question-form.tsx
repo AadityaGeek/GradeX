@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from "react";
@@ -120,7 +119,7 @@ export function QuestionForm() {
         // Update total generation count for all users
         batch.update(userDocRef, { totalGeneratedCount: increment(totalQuestions) });
         
-        // Deduct credits if not premium
+        // Deduct credits if not premium (1 credit per 10 questions)
         if (user.planId !== 'premium') {
             const cost = Math.ceil(totalQuestions / 10);
             batch.update(userDocRef, { generationsRemaining: increment(-cost) });

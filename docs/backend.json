@@ -1,4 +1,3 @@
-
 {
   "entities": {
     "UserProfile": {
@@ -30,7 +29,7 @@
         },
         "totalGeneratedCount": {
             "type": "number",
-            "description": "The total number of questions this user has generated."
+            "description": "The total number of questions this user has generated across all time."
         },
         "planId": {
           "type": "string",

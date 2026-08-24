@@ -1,4 +1,3 @@
-
 'use client';
 import { User, onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
@@ -27,13 +26,12 @@ export const useUser = () => {
             setUser({
               ...authUser,
               generationsRemaining: userProfileData.generationsRemaining,
-              totalGeneratedCount: userProfileData.totalGeneratedCount,
+              totalGeneratedCount: userProfileData.totalGeneratedCount || 0,
               planId: userProfileData.planId,
             });
           } else {
             // User exists in Auth but not in Firestore yet.
-            // This can happen briefly during the first login.
-            setUser(authUser);
+            setUser(authUser as UserProfile);
           }
           setLoading(false);
         });
