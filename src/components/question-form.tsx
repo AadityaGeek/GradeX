@@ -272,7 +272,7 @@ export function QuestionForm() {
                                     onCheckedChange={(checked) => {
                                         const currentValues = field.value || [];
                                         if (checked) {
-                                          // Set default count to 5
+                                          // Set default count to 5 as requested
                                           field.onChange([...currentValues, { id: type.id, type: type.name, count: 5 }]);
                                         } else {
                                           field.onChange(currentValues.filter((q) => q.id !== type.id));
@@ -314,7 +314,7 @@ export function QuestionForm() {
                                     <div className="cursor-not-allowed">{content}</div>
                                     </TooltipTrigger>
                                     <TooltipContent>
-                                    <p>Upgrade to Basic, Pro or Premium to unlock this type.</p>
+                                    <p>Upgrade your plan to unlock {type.name} questions.</p>
                                     </TooltipContent>
                                 </Tooltip>
                                 );

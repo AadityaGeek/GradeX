@@ -57,17 +57,19 @@ export default function PricingPage() {
                       </Button>
                     );
                   }
+                  
+                  // For logged in users, don't show "Upgrade" on the free plan card
+                  // if it's not their current plan (which it shouldn't be anyway)
+                  if (user && plan.id === 'free') {
+                    return null;
+                  }
+
                   if (!user) {
                     return (
                       <Button asChild className="w-full">
                         <Link href="/login">Get Started</Link>
                       </Button>
                     );
-                  }
-                  
-                  // A user should not see "Upgrade" on the free plan card if it's not their current plan
-                  if (plan.id === 'free') {
-                    return null;
                   }
 
                   return (
