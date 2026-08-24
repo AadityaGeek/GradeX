@@ -74,13 +74,21 @@ export default function LoginPage() {
         description: 'You have successfully logged in.',
       });
       // Redirect is handled by the useEffect hook
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error signing in with Google: ', error);
-      toast({
-        variant: 'destructive',
-        title: 'Login Failed',
-        description: 'Could not sign you in with Google. Please try again.',
-      });
+      if (error.code === 'auth/popup-blocked') {
+        toast({
+          variant: 'destructive',
+          title: 'Popup Blocked',
+          description: 'Your browser blocked the Google sign-in window. Please disable your ad-blocker or allow popups for this site and try again.',
+        });
+      } else {
+        toast({
+          variant: 'destructive',
+          title: 'Login Failed',
+          description: 'Could not sign you in with Google. Please try again.',
+        });
+      }
     } finally {
       setIsSigningIn(false);
     }
