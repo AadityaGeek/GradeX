@@ -1,3 +1,4 @@
+
 {
   "name": "gradex",
   "version": "0.1.0",
@@ -34,7 +35,7 @@
     "genkit": "^1.0.0",
     "jspdf": "^2.5.2",
     "lucide-react": "^0.462.0",
-    "next": "15.1.0",
+    "next": "15.1.4",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-hook-form": "^7.53.2",
@@ -46,16 +47,18 @@
     "@types/node": "^20",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "postcss": "^8.5.2",
+    "postcss": "^8.5.3",
     "tailwindcss": "^3.4.1",
     "typescript": "^5",
     "tsx": "^4.19.2"
   },
   "overrides": {
-    "postcss": "^8.5.2",
-    "sharp": "^0.35.0",
+    "postcss": "^8.5.3",
+    "sharp": "^0.35.1",
     "uuid": "^11.1.1",
     "adm-zip": "^0.6.0",
-    "extract-zip": "^2.0.1"
+    "extract-zip": "^2.0.1",
+    "dompurify": "^3.2.4",
+    "@opentelemetry/core": "^1.30.1"
   }
 }
