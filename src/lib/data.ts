@@ -57,7 +57,6 @@ export const PLANS: Plan[] = [
   }
 ];
 
-
 export const getClasses = async (): Promise<Pick<Class, 'id' | 'name'>[]> => {
   const classList = CURRICULUM_DATA.map(c => ({ id: c.id, name: c.name }));
   return classList.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
