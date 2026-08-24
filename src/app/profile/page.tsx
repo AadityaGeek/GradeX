@@ -21,8 +21,6 @@ export default function ProfilePage() {
   }
 
   if (!user) {
-    // This should ideally be handled by middleware or a higher-level redirect,
-    // but as a fallback, we can show a message.
     return (
         <div className="flex min-h-[calc(100vh-10rem)] items-center justify-center px-4">
             <Card className="w-full max-w-md text-center">

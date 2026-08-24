@@ -7,13 +7,13 @@ export const PLANS: Plan[] = [
     id: 'free',
     name: 'Free',
     price: '₹0',
-    priceDetails: 'per month',
+    priceDetails: 'forever',
     generations: 5,
     features: [
-      '5 Credits per month',
+      '5 Credits upon signup',
       'Access to basic question types',
       'PDF Export',
-      'Basic Support',
+      'Community Support',
     ],
   },
   {

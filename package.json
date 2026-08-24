@@ -35,7 +35,7 @@
     "genkit": "^1.41.0",
     "jspdf": "^4.2.1",
     "lucide-react": "^0.475.0",
-    "next": "^15.5.23",
+    "next": "^16.3.2",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-hook-form": "^7.54.2",
@@ -54,6 +54,6 @@
     "typescript": "^5"
   },
   "overrides": {
-  "adm-zip": "^0.6.0"
-}
+    "adm-zip": "^0.6.0"
+  }
 }

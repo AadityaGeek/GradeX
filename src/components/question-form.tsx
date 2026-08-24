@@ -272,7 +272,6 @@ export function QuestionForm() {
                                     onCheckedChange={(checked) => {
                                         const currentValues = field.value || [];
                                         if (checked) {
-                                          // Set default count to 5 as requested
                                           field.onChange([...currentValues, { id: type.id, type: type.name, count: 5 }]);
                                         } else {
                                           field.onChange(currentValues.filter((q) => q.id !== type.id));

@@ -1,5 +1,5 @@
 
-import type {Metadata} from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 import { Footer } from '@/components/footer';
@@ -14,13 +14,16 @@ const poppins = Poppins({
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://gradex-ai.vercel.app/';
 
+export const viewport: Viewport = {
+  themeColor: '#29ABE2',
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: 'GradeX - AI-Powered Question Paper Generator',
   description: 'Generate high-quality, exam-oriented question papers for any subject in seconds with GradeX. Perfect for students and educators.',
   keywords: ['AI question generator', 'exam preparation', 'test maker', 'study tool', 'CBSE questions', 'student resources', 'educational technology'],
   authors: [{ name: 'Aaditya Kumar', url: 'https://github.com/AadityaGeek' }],
-  themeColor: '#29ABE2',
   openGraph: {
     title: 'GradeX - AI-Powered Question Paper Generator',
     description: 'Generate high-quality, exam-oriented question papers for any subject in seconds. Perfect for students and educators.',
