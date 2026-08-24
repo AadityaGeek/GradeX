@@ -40,6 +40,9 @@ export function ReviewDialog({
 
   const { chapters, questionTypes } = formData;
   const { className, subjectName } = classAndSubject;
+  
+  const totalQuestions = questionTypes.reduce((sum, qt) => sum + qt.count, 0);
+  const generationCost = Math.ceil(totalQuestions / 10);
 
   return (
     <AlertDialog open={isOpen} onOpenChange={onClose}>
@@ -77,6 +80,16 @@ export function ReviewDialog({
                 </li>
               ))}
             </ul>
+          </div>
+          <div className="border-t pt-4 mt-4">
+             <div className="flex justify-between font-bold">
+                <span className="text-muted-foreground">Total Questions:</span>
+                <span>{totalQuestions}</span>
+            </div>
+            <div className="flex justify-between font-bold text-primary">
+                <span className="">Generation Cost:</span>
+                <span>{generationCost} {generationCost > 1 ? 'Credits' : 'Credit'}</span>
+            </div>
           </div>
         </div>
         <AlertDialogFooter>

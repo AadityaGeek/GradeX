@@ -73,7 +73,9 @@ export default function AboutPage() {
                        GradeX started from a simple, personal frustration: <span className="italic">"Why is it so hard to find good, relevant practice questions for a specific chapter?"</span> I spent countless hours searching for materials during my own studies and saw a clear gap.
                     </p>
                      <p className="text-lg text-muted-foreground">
+
                        I realized AI could solve this. It could understand the curriculum, adapt to different question types, and generate a unique paper in seconds. This project was born out of the desire to build the tool I wish I had — a tool to help students focus on learning, not just searching.
+
                     </p>
                 </div>
             </div>

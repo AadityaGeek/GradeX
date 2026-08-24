@@ -5,13 +5,14 @@ import { Toaster } from "@/components/ui/toaster"
 import { Footer } from '@/components/footer';
 import { Poppins } from 'next/font/google';
 import { Header } from '@/components/header';
+import { FirebaseProvider } from '@/firebase/client-provider';
 
 const poppins = Poppins({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700']
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://examease-app.vercel.app/';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://gradex-ai.vercel.app/';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -49,12 +50,14 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${poppins.className} antialiased min-h-screen bg-background`}>
-        <Header />
-        <div className="flex-1">
-          {children}
-        </div>
-        <Footer />
-        <Toaster />
+        <FirebaseProvider>
+          <Header />
+          <div className="flex-1">
+            {children}
+          </div>
+          <Footer />
+          <Toaster />
+        </FirebaseProvider>
       </body>
     </html>
   );

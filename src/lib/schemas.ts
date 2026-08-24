@@ -2,12 +2,12 @@
 import { z } from "zod";
 
 export const QUESTION_TYPES = [
-    { id: 'mcq', name: 'MCQ' },
-    { id: 'fill-in-the-blanks', name: 'Fill in the Blanks' },
-    { id: 'true-false', name: 'True/False' },
-    { id: 'very-short-answer', name: 'Very Short Answer' },
-    { id: 'short-answer', name: 'Short Answer' },
-    { id: 'long-answer', name: 'Long Answer' },
+    { id: 'mcq', name: 'MCQ', isPremium: true },
+    { id: 'fill-in-the-blanks', name: 'Fill in the Blanks', isPremium: false },
+    { id: 'true-false', name: 'True/False', isPremium: false },
+    { id: 'very-short-answer', name: 'Very Short Answer', isPremium: false },
+    { id: 'short-answer', name: 'Short Answer', isPremium: true },
+    { id: 'long-answer', name: 'Long Answer', isPremium: true },
 ] as const;
 
 
