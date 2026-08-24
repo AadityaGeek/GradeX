@@ -25,6 +25,7 @@ import { useUser } from "@/firebase/auth/use-user";
 import { useFirebase } from "@/firebase/client-provider";
 import { doc, increment, writeBatch } from "firebase/firestore";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
+import { cn } from "@/lib/utils";
 
 export function QuestionForm() {
   const { toast } = useToast();

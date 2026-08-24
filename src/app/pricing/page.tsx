@@ -65,7 +65,7 @@ export default function PricingPage() {
                     );
                   }
                   
-                  // A user on a paid plan should not see an "upgrade" option on the free plan card
+                  // A user should not see "Upgrade" on the free plan card if it's not their current plan
                   if (plan.id === 'free') {
                     return null;
                   }
