@@ -7,7 +7,7 @@ import { useUser } from '@/firebase/auth/use-user';
 import { useToast } from '@/hooks/use-toast';
 import { PLANS } from '@/lib/data';
 import { cn } from '@/lib/utils';
-import { CheckCircle2, Diamond, XCircle } from 'lucide-react';
+import { CheckCircle2, Diamond } from 'lucide-react';
 import Link from 'next/link';
 
 export default function PricingPage() {
@@ -16,7 +16,6 @@ export default function PricingPage() {
 
   const handleChoosePlan = () => {
     if (!user) {
-        // This case is handled by the redirect, but as a fallback
         toast({
             title: 'Please log in',
             description: 'You need to be logged in to choose a plan.',
@@ -24,7 +23,6 @@ export default function PricingPage() {
         });
         return;
     }
-    // In a real app, this would trigger a checkout flow (e.g., Stripe)
     toast({
       title: 'Coming Soon!',
       description: 'The ability to upgrade your plan is coming soon. Stay tuned!',
@@ -66,11 +64,12 @@ export default function PricingPage() {
                       </Button>
                     );
                   }
-                   if (plan.id === 'free') {
-                     // A logged-in user can't "get" the free plan again
-                     return null; 
-                   }
-                  // For logged-in users, on a plan they are not on
+                  
+                  // A user on a paid plan should not see an "upgrade" option on the free plan card
+                  if (plan.id === 'free') {
+                    return null;
+                  }
+
                   return (
                     <Button onClick={handleChoosePlan} className="w-full">
                       Upgrade
@@ -88,7 +87,7 @@ export default function PricingPage() {
                   >
                     <CardHeader className="text-center">
                       <CardTitle className="text-2xl font-bold flex items-center justify-center gap-2">
-                          {plan.name === "Premium" && <Diamond className="text-primary"/>}
+                          {plan.id === 'premium' && <Diamond className="text-primary"/>}
                           {plan.name}
                       </CardTitle>
                       <CardDescription>{plan.price} <span className="text-xs">{plan.priceDetails}</span></CardDescription>
@@ -110,17 +109,6 @@ export default function PricingPage() {
                 );
               })}
             </div>
-             {!user && (
-                <div className="mt-12 text-center">
-                    <p className="text-muted-foreground">
-                        Already have an account?{' '}
-                        <Link href="/login" className="font-semibold text-primary hover:underline">
-                            Log in
-                        </Link>
-                        .
-                    </p>
-                </div>
-            )}
           </div>
         </section>
       </main>

@@ -28,7 +28,6 @@ export const PLANS: Plan[] = [
       'PDF Export with Answers',
       'Priority Support',
     ],
-    isFeatured: true,
   },
   {
     id: 'pro',
@@ -78,8 +77,6 @@ export const getChapters = async (classId: string, subjectId: string): Promise<C
     if (!classData) return [];
     const subjectData = classData.subjects.find(s => s.id === subjectId);
     if (!subjectData) return [];
-    // The data is already in book sequence in the source file, so we just return it.
-    // If sorting is needed, it can be done here.
     return subjectData.chapters.sort((a,b) => a.id.localeCompare(b.id, undefined, { numeric: true }));
 };
 
