@@ -112,15 +112,21 @@ export function QuestionForm() {
     startTransition(async () => {
       const result = await createQuestionPaper(reviewData);
       if (result.success && result.data) {
+        const totalQuestions = reviewData.questionTypes.reduce((sum, qt) => sum + qt.count, 0);
+        
+        const userDocRef = doc(firestore, "users", user.uid);
+        const batch = writeBatch(firestore);
+        
+        // Update total generation count for all users
+        batch.update(userDocRef, { totalGeneratedCount: increment(totalQuestions) });
+        
+        // Deduct credits if not premium
         if (user.planId !== 'premium') {
-            const totalQuestions = reviewData.questionTypes.reduce((sum, qt) => sum + qt.count, 0);
             const cost = Math.ceil(totalQuestions / 10);
-            
-            const userDocRef = doc(firestore, "users", user.uid);
-            const batch = writeBatch(firestore);
             batch.update(userDocRef, { generationsRemaining: increment(-cost) });
-            await batch.commit();
         }
+        
+        await batch.commit();
 
         sessionStorage.setItem("questionPaperData", JSON.stringify(result.data));
         toast({ title: "Success!", description: "Your questions have been generated." });

@@ -7,6 +7,7 @@ import { doc, onSnapshot } from 'firebase/firestore';
 
 export interface UserProfile extends User {
   generationsRemaining?: number;
+  totalGeneratedCount?: number;
   planId?: string;
 }
 
@@ -26,6 +27,7 @@ export const useUser = () => {
             setUser({
               ...authUser,
               generationsRemaining: userProfileData.generationsRemaining,
+              totalGeneratedCount: userProfileData.totalGeneratedCount,
               planId: userProfileData.planId,
             });
           } else {

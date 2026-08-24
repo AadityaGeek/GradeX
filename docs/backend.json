@@ -28,6 +28,10 @@
             "type": "number",
             "description": "The number of question paper generations the user has left."
         },
+        "totalGeneratedCount": {
+            "type": "number",
+            "description": "The total number of questions this user has generated."
+        },
         "planId": {
           "type": "string",
           "description": "The ID of the user's current subscription plan.",

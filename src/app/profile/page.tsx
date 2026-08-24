@@ -4,7 +4,7 @@
 import { useUser } from '@/firebase/auth/use-user';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Loader2, Star, Zap, Crown } from 'lucide-react';
+import { Loader2, Star, Zap, Crown, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { PLANS } from '@/lib/data';
@@ -57,31 +57,40 @@ export default function ProfilePage() {
                 <CardDescription className="text-base">{user.email}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6 pt-6">
-                <div className="flex items-center justify-between rounded-lg border p-4">
-                    <div className="flex items-center gap-3">
-                        <Crown className="h-6 w-6 text-yellow-500" />
-                        <span className="font-semibold">Current Plan</span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="flex flex-col items-center justify-center rounded-lg border p-6 text-center space-y-2">
+                        <Crown className="h-8 w-8 text-yellow-500" />
+                        <span className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Plan</span>
+                        <span className="text-2xl font-bold text-primary">{currentPlan?.name || 'Free'}</span>
                     </div>
-                    <span className="text-xl font-bold text-primary">{currentPlan?.name || 'Free'}</span>
-                </div>
-                <div className="flex items-center justify-between rounded-lg border p-4">
-                    <div className="flex items-center gap-3">
-                        <Star className="h-6 w-6 text-primary" />
-                        <span className="font-semibold">Credits Remaining</span>
+                    <div className="flex flex-col items-center justify-center rounded-lg border p-6 text-center space-y-2">
+                        <Star className="h-8 w-8 text-primary" />
+                        <span className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Credits</span>
+                        <span className="text-2xl font-bold text-primary">
+                            {user.planId === 'premium' ? 'Unlimited' : (user.generationsRemaining ?? 0)}
+                        </span>
                     </div>
-                    <span className="text-xl font-bold text-primary">{user.planId === 'premium' ? 'Unlimited' : (user.generationsRemaining ?? 0)}</span>
                 </div>
+
+                <div className="flex items-center justify-between rounded-lg border p-4 bg-secondary/10">
+                    <div className="flex items-center gap-3">
+                        <BookOpen className="h-6 w-6 text-primary" />
+                        <span className="font-semibold">Total Questions Generated</span>
+                    </div>
+                    <span className="text-xl font-bold text-primary">{user.totalGeneratedCount ?? 0}</span>
+                </div>
+
                  <div className="text-center text-sm text-muted-foreground">
                     You use 1 credit for every 10 questions generated.
                 </div>
-                <div className="flex justify-center items-center gap-4 pt-4">
-                    <Button asChild>
+                <div className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4">
+                    <Button asChild className="w-full sm:w-auto">
                         <Link href="/generate">
                             <Zap className="mr-2 h-4 w-4" />
                             Generate New Paper
                         </Link>
                     </Button>
-                    <Button asChild variant="outline">
+                    <Button asChild variant="outline" className="w-full sm:w-auto">
                         <Link href="/pricing">
                             <Crown className="mr-2 h-4 w-4" />
                             Upgrade Plan
