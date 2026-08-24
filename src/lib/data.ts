@@ -1,6 +1,7 @@
 
 import { CURRICULUM_DATA } from './curriculum-data';
 import type { Chapter, Class, Plan, Subject } from './types';
+export type { Chapter, Class, Plan, Subject };
 
 export const PLANS: Plan[] = [
   {

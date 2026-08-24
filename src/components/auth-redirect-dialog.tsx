@@ -38,7 +38,7 @@ export function AuthRedirectDialog() {
         const userDocRef = doc(firestore, "users", loggedInUser.uid);
         const userDoc = await getDoc(userDocRef);
         const freePlan = PLANS.find(p => p.id === 'free');
-        const freePlanGenerations = freePlan ? freePlan.generations : 50;
+        const freePlanGenerations = freePlan ? freePlan.generations : 5;
 
         if (!userDoc.exists()) {
           // New user

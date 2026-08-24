@@ -212,7 +212,7 @@ export function QuestionForm() {
                             <Label>Chapters</Label>
                             <FormMessage className="ml-2" />
                           </div>
-                          <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                             {chapters.map((chapter) => (
                               <FormField
                                 key={chapter.id}
