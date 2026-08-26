@@ -297,9 +297,9 @@ export const generatePdf = async (
       fontSize = 11,
       textColor = "#000000"
     ) => {
+      doc.setFont(fontName, fontStyle);
+      doc.setFontSize(fontSize);
       if (!isSimulation) {
-        doc.setFont(fontName, fontStyle);
-        doc.setFontSize(fontSize);
         doc.setTextColor(textColor);
       }
 
@@ -361,9 +361,9 @@ export const generatePdf = async (
         }
       }
 
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(15);
       if (!isSimulation) {
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(15);
         doc.setTextColor("#000000");
         doc.text(type, MARGIN, yPos);
       }
@@ -383,6 +383,8 @@ export const generatePdf = async (
         // 1. Question Text
         const formattedQuestion = formatTextForPdf(question);
         const questionPrefix = `${index + 1}. `;
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(11);
         const questionLines = doc.splitTextToSize(`${questionPrefix}${formattedQuestion}`, CONTENT_WIDTH);
         printLines(questionLines, MARGIN, 5.2, "helvetica", "normal", 11, "#000000");
         yPos += 1.5;
@@ -390,12 +392,16 @@ export const generatePdf = async (
         // 2. Answer Text (if included)
         if (includeAnswers && answer) {
           const formattedAnswer = formatTextForPdf(answer);
+          doc.setFont("helvetica", "italic");
+          doc.setFontSize(10.5);
           const answerLines = doc.splitTextToSize(`Ans: ${formattedAnswer}`, CONTENT_WIDTH - 4);
           printLines(answerLines, MARGIN + 4, 4.8, "helvetica", "italic", 10.5, ANSWER_COLOR);
 
           // 3. Explanation Text (if included)
           if (explanation && explanation.trim()) {
             const formattedExplanation = formatTextForPdf(explanation);
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(10);
             const explanationLines = doc.splitTextToSize(`Explanation: ${formattedExplanation}`, CONTENT_WIDTH - 4);
             printLines(explanationLines, MARGIN + 4, 4.8, "helvetica", "normal", 10, EXPLANATION_COLOR);
           }

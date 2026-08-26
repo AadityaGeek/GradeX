@@ -71,38 +71,41 @@ export function Footer() {
                         </div>
                     </div>
 
-                    {/* Quick Links Column */}
-                    <div className="flex flex-col gap-4">
-                        <h3 className="font-semibold text-sm tracking-wider uppercase text-muted-foreground">Quick Links</h3>
-                        <ul className="flex flex-col gap-2">
-                            {quickLinks.map((link) => (
-                                <li key={link.href}>
-                                    <Link
-                                        href={link.href}
-                                        className="text-sm text-muted-foreground hover:text-primary transition-colors hover:translate-x-0.5 inline-block"
-                                    >
-                                        {link.label}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
+                    {/* Links Section: Side by side on mobile (grid-cols-2) and 2 columns on desktop */}
+                    <div className="grid grid-cols-2 gap-6 md:col-span-2 md:gap-8">
+                        {/* Quick Links Column */}
+                        <div className="flex flex-col gap-4">
+                            <h3 className="font-semibold text-sm tracking-wider uppercase text-muted-foreground">Quick Links</h3>
+                            <ul className="flex flex-col gap-2">
+                                {quickLinks.map((link) => (
+                                    <li key={link.href}>
+                                        <Link
+                                            href={link.href}
+                                            className="text-sm text-muted-foreground hover:text-primary transition-colors hover:translate-x-0.5 inline-block"
+                                        >
+                                            {link.label}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
 
-                    {/* Resources Column */}
-                    <div className="flex flex-col gap-4">
-                        <h3 className="font-semibold text-sm tracking-wider uppercase text-muted-foreground">Resources</h3>
-                        <ul className="flex flex-col gap-2">
-                            {resourceLinks.map((link) => (
-                                <li key={link.href}>
-                                    <Link
-                                        href={link.href}
-                                        className="text-sm text-muted-foreground hover:text-primary transition-colors hover:translate-x-0.5 inline-block"
-                                    >
-                                        {link.label}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
+                        {/* Resources Column */}
+                        <div className="flex flex-col gap-4">
+                            <h3 className="font-semibold text-sm tracking-wider uppercase text-muted-foreground">Resources</h3>
+                            <ul className="flex flex-col gap-2">
+                                {resourceLinks.map((link) => (
+                                    <li key={link.href}>
+                                        <Link
+                                            href={link.href}
+                                            className="text-sm text-muted-foreground hover:text-primary transition-colors hover:translate-x-0.5 inline-block"
+                                        >
+                                            {link.label}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
