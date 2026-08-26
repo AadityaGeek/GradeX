@@ -1,10 +1,8 @@
-
 "use client";
 
 import * as React from "react";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -13,14 +11,12 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import type { QuestionFormSchema } from "@/lib/schemas";
-import { Loader2 } from "lucide-react";
 import { Button } from "./ui/button";
 
 interface ReviewDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  isPending: boolean;
   formData: QuestionFormSchema;
   classAndSubject: {
     className: string;
@@ -32,7 +28,6 @@ export function ReviewDialog({
   isOpen,
   onClose,
   onConfirm,
-  isPending,
   formData,
   classAndSubject,
 }: ReviewDialogProps) {
@@ -45,8 +40,8 @@ export function ReviewDialog({
   const generationCost = Math.ceil(totalQuestions / 10);
 
   return (
-    <AlertDialog open={isOpen} onOpenChange={onClose}>
-      <AlertDialogContent>
+    <AlertDialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <AlertDialogContent className="sm:max-w-md">
         <AlertDialogHeader>
           <AlertDialogTitle>Review Your Choices</AlertDialogTitle>
           <AlertDialogDescription>
@@ -82,7 +77,7 @@ export function ReviewDialog({
             </ul>
           </div>
           <div className="border-t pt-4 mt-4">
-             <div className="flex justify-between font-bold">
+            <div className="flex justify-between font-bold">
                 <span className="text-muted-foreground">Total Questions:</span>
                 <span>{totalQuestions}</span>
             </div>
@@ -93,13 +88,13 @@ export function ReviewDialog({
           </div>
         </div>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
-          <AlertDialogAction asChild>
-            <Button onClick={onConfirm} disabled={isPending}>
-              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isPending ? "Generating..." : "Confirm & Generate"}
-            </Button>
-          </AlertDialogAction>
+          <AlertDialogCancel onClick={onClose}>Cancel</AlertDialogCancel>
+          <Button onClick={() => {
+            onClose();
+            onConfirm();
+          }}>
+            Confirm & Generate
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

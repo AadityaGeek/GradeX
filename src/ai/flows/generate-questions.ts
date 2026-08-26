@@ -36,31 +36,50 @@ export type GenerateQuestionsInput = z.infer<typeof GenerateQuestionsInputSchema
 const QuestionWithAnswerSchema = z.object({
   question: z.string(),
   answer: z.string(),
-  explanation: z.string().optional(),
+  explanation: z.string().optional().nullable(),
 });
 export type QuestionWithAnswer = z.infer<typeof QuestionWithAnswerSchema>;
 
 // Define the output schema for the generateQuestions flow
 const GenerateQuestionsOutputSchema = z.object({
   questions: z.record(
+    z.string(),
     z.array(QuestionWithAnswerSchema)
   ).describe('Generated questions and answers, grouped by question type. The keys of this record should be the question types from the input.'),
 });
 
 export type GenerateQuestionsOutput = z.infer<typeof GenerateQuestionsOutputSchema>;
 
-
 // Define the generateQuestions function
 export async function generateQuestions(input: GenerateQuestionsInput): Promise<GenerateQuestionsOutput> {
   return generateQuestionsFlow(input);
 }
 
-// Define the prompt for generating questions
+// Define the prompt for generating questions with structured output schema
 const generateQuestionsPrompt = ai.definePrompt({
   name: 'generateQuestionsPrompt',
-  input: {schema: GenerateQuestionsInputSchema},
+  input: { schema: GenerateQuestionsInputSchema },
+  output: { schema: GenerateQuestionsOutputSchema },
   prompt: process.env.GENERATE_QUESTIONS_PROMPT || '',
 });
+
+// Helper to clean and parse JSON from AI text when needed
+function parseAIJsonResponse(rawText: string) {
+  let cleaned = rawText.trim();
+  // Strip markdown code fences if present (```json ... ```)
+  if (cleaned.startsWith('```')) {
+    cleaned = cleaned.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+  }
+  
+  // Extract JSON bounds if extra text was included
+  const firstBrace = cleaned.indexOf('{');
+  const lastBrace = cleaned.lastIndexOf('}');
+  if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+    cleaned = cleaned.substring(firstBrace, lastBrace + 1);
+  }
+
+  return JSON.parse(cleaned);
+}
 
 // Define the Genkit flow for generating questions
 const generateQuestionsFlow = ai.defineFlow(
@@ -71,33 +90,43 @@ const generateQuestionsFlow = ai.defineFlow(
   },
   async input => {
     if (!process.env.GENERATE_QUESTIONS_PROMPT) {
-        throw new Error("CRITICAL: The GENERATE_QUESTIONS_PROMPT environment variable is not set.");
+      throw new Error("CRITICAL: The GENERATE_QUESTIONS_PROMPT environment variable is not set.");
     }
 
     const response = await generateQuestionsPrompt(input);
-    const textResponse = response.text;
 
-    try {
-      // The AI might sometimes wrap the JSON in ```json ... ``` or add other text.
-      // This regex looks for the first '{' and the last '}' to extract the JSON object.
-      const jsonMatch = textResponse.match(/{[\s\S]*}/);
-      
-      if (!jsonMatch) {
-        throw new Error("No valid JSON object found in the AI's response.");
+    // 1. Direct structured output from Genkit if available
+    if (response.output) {
+      const parsed = GenerateQuestionsOutputSchema.safeParse(response.output);
+      if (parsed.success) {
+        const cleanedQuestions: Record<string, QuestionWithAnswer[]> = {};
+        for (const req of input.questionTypes) {
+          const generated = parsed.data.questions[req.type] || [];
+          cleanedQuestions[req.type] = generated.slice(0, req.count);
+        }
+        return { questions: cleanedQuestions };
       }
+    }
 
-      const jsonString = jsonMatch[0];
-      const parsedJson = JSON.parse(jsonString);
-      
-      // Validate the parsed JSON against our Zod schema
+    // 2. Fallback to parsing text response
+    const textResponse = response.text || '';
+    try {
+      const parsedJson = parseAIJsonResponse(textResponse);
       const validationResult = GenerateQuestionsOutputSchema.safeParse(parsedJson);
-      
+
       if (!validationResult.success) {
-        console.error("AI output failed Zod validation:", validationResult.error);
+        console.error("AI output failed Zod validation:", JSON.stringify(validationResult.error.issues, null, 2));
         throw new Error("The AI returned data in an unexpected format. Please try again.");
       }
-      
-      return validationResult.data;
+
+      // Post-process: ensure question counts strictly match the user's requested counts
+      const cleanedQuestions: Record<string, QuestionWithAnswer[]> = {};
+      for (const req of input.questionTypes) {
+        const generated = (validationResult.data as GenerateQuestionsOutput).questions[req.type] || [];
+        cleanedQuestions[req.type] = generated.slice(0, req.count);
+      }
+
+      return { questions: cleanedQuestions };
     } catch (error) {
       console.error("Failed to parse JSON response from AI:", error);
       console.error("Raw AI response was:", textResponse);

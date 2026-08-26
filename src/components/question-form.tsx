@@ -18,7 +18,7 @@ import { useToast } from "@/hooks/use-toast";
 import { createQuestionPaper } from "@/app/actions";
 import { type Chapter, type Class, type Subject, getClasses, getSubjects, getChapters } from "@/lib/data";
 import { QUESTION_TYPES, questionFormSchema, type QuestionFormSchema } from "@/lib/schemas";
-import { BrainCircuit, CheckCircle2, Lock, Sparkles, Wand2 } from "lucide-react";
+import { Loader2, Lock } from "lucide-react";
 import { ReviewDialog } from "./review-dialog";
 import { useUser } from "@/firebase/auth/use-user";
 import { useFirebase } from "@/firebase/client-provider";
@@ -26,89 +26,65 @@ import { doc, increment, writeBatch } from "firebase/firestore";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 import { cn } from "@/lib/utils";
 
-const GENERATION_STEPS = [
-  { icon: BrainCircuit, message: "Analyzing your selections..." },
-  { icon: Wand2, message: "Crafting your questions..." },
-  { icon: Sparkles, message: "Writing answer explanations..." },
-  { icon: CheckCircle2, message: "Finalizing your paper..." },
+const GENERATION_STAGES = [
+  "Analyzing curriculum & chapters...",
+  "Formulating exam-standard questions...",
+  "Writing solutions & explanations...",
+  "Finalizing question paper...",
 ];
 
-function GeneratingOverlay({ isVisible }: { isVisible: boolean }) {
-  const [stepIndex, setStepIndex] = React.useState(0);
+function InlineGenerationProgress({ isPending }: { isPending: boolean }) {
+  const [stageIndex, setStageIndex] = React.useState(0);
+  const [progress, setProgress] = React.useState(18);
 
   React.useEffect(() => {
-    if (!isVisible) {
-      setStepIndex(0);
+    if (!isPending) {
+      setStageIndex(0);
+      setProgress(18);
       return;
     }
-    const interval = setInterval(() => {
-      setStepIndex((prev) => (prev < GENERATION_STEPS.length - 1 ? prev + 1 : prev));
+
+    const stageInterval = setInterval(() => {
+      setStageIndex((prev) => (prev < GENERATION_STAGES.length - 1 ? prev + 1 : prev));
     }, 2800);
-    return () => clearInterval(interval);
-  }, [isVisible]);
+
+    const progressInterval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 92) return prev;
+        const jump = Math.floor(Math.random() * 7) + 3;
+        return Math.min(prev + jump, 92);
+      });
+    }, 500);
+
+    return () => {
+      clearInterval(stageInterval);
+      clearInterval(progressInterval);
+    };
+  }, [isPending]);
+
+  if (!isPending) return null;
 
   return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm"
-        >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
-            className="flex flex-col items-center gap-8 rounded-2xl border bg-card p-10 shadow-2xl max-w-sm w-full mx-4"
-          >
-            {/* Pulsing orb */}
-            <div className="relative flex items-center justify-center">
-              <span className="absolute h-20 w-20 rounded-full bg-primary/20 animate-ping" />
-              <span className="absolute h-14 w-14 rounded-full bg-primary/30 animate-ping [animation-delay:0.3s]" />
-              <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-primary">
-                <BrainCircuit className="h-8 w-8 text-primary-foreground" />
-              </div>
-            </div>
-
-            {/* Step message */}
-            <div className="text-center space-y-2 min-h-[4rem]">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={stepIndex}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.4 }}
-                  className="flex flex-col items-center gap-2"
-                >
-                  <p className="text-lg font-semibold text-foreground">
-                    {GENERATION_STEPS[stepIndex].message}
-                  </p>
-                </motion.div>
-              </AnimatePresence>
-              <p className="text-sm text-muted-foreground">This usually takes 5–15 seconds</p>
-            </div>
-
-            {/* Step dots */}
-            <div className="flex items-center gap-2">
-              {GENERATION_STEPS.map((_, i) => (
-                <motion.div
-                  key={i}
-                  animate={{
-                    width: i === stepIndex ? 24 : 8,
-                    backgroundColor: i <= stepIndex ? "hsl(var(--primary))" : "hsl(var(--border))",
-                  }}
-                  transition={{ duration: 0.3 }}
-                  className="h-2 rounded-full"
-                />
-              ))}
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <motion.div
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -6 }}
+      className="rounded-xl border bg-secondary/30 p-3.5 space-y-2 text-xs"
+    >
+      <div className="flex items-center justify-between text-muted-foreground">
+        <span className="flex items-center gap-1.5 font-medium text-foreground">
+          <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
+          {GENERATION_STAGES[stageIndex]}
+        </span>
+        <span className="font-semibold tabular-nums text-primary">{progress}%</span>
+      </div>
+      <div className="h-1.5 w-full overflow-hidden rounded-full bg-secondary">
+        <div
+          className="h-full bg-gradient-to-r from-primary to-cyan-400 rounded-full transition-all duration-500 ease-out"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+    </motion.div>
   );
 }
 
@@ -225,13 +201,11 @@ export function QuestionForm() {
 
   return (
     <>
-      <GeneratingOverlay isVisible={isPending} />
       {reviewData && (
           <ReviewDialog
             isOpen={!!reviewData}
             onClose={() => setReviewData(null)}
             onConfirm={handleConfirm}
-            isPending={isPending}
             formData={reviewData}
             classAndSubject={{
               className: classes.find(c => c.id === reviewData.classId)?.name || '',
@@ -254,7 +228,7 @@ export function QuestionForm() {
                   render={({ field }) => (
                     <FormItem>
                       <Label>Class</Label>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isPending}>
                         <FormControl>
                           <SelectTrigger><SelectValue placeholder="Select a class" /></SelectTrigger>
                         </FormControl>
@@ -272,7 +246,7 @@ export function QuestionForm() {
                   render={({ field }) => (
                     <FormItem>
                       <Label>Subject</Label>
-                      <Select onValueChange={field.onChange} value={field.value} disabled={!watchedClassId}>
+                      <Select onValueChange={field.onChange} value={field.value} disabled={!watchedClassId || isPending}>
                         <FormControl>
                           <SelectTrigger><SelectValue placeholder="Select a subject" /></SelectTrigger>
                         </FormControl>
@@ -309,15 +283,26 @@ export function QuestionForm() {
                                   <FormItem className="flex flex-row items-center space-x-3 space-y-0">
                                     <FormControl>
                                       <Checkbox
+                                        id={`chapter-${chapter.id}`}
+                                        disabled={isPending}
                                         checked={field.value?.some(c => c.id === chapter.id)}
                                         onCheckedChange={(checked) => {
+                                          if (isPending) return;
                                           return checked
                                             ? field.onChange([...(field.value || []), chapter])
                                             : field.onChange(field.value?.filter((value) => value.id !== chapter.id));
                                         }}
                                       />
                                     </FormControl>
-                                    <label className="font-normal cursor-pointer">{chapter.title}</label>
+                                    <label
+                                      htmlFor={isPending ? undefined : `chapter-${chapter.id}`}
+                                      className={cn(
+                                        "font-normal select-none",
+                                        isPending ? "cursor-not-allowed opacity-60" : "cursor-pointer"
+                                      )}
+                                    >
+                                      {chapter.title}
+                                    </label>
                                   </FormItem>
                                 )}
                               />
@@ -354,14 +339,18 @@ export function QuestionForm() {
                                 className={cn(
                                     "flex flex-row items-center justify-between p-3 bg-secondary/30 rounded-lg border border-transparent transition-all",
                                     isSelected && "border-primary bg-secondary/50",
-                                    isLocked && "opacity-70 grayscale"
+                                    (isLocked || isPending) && "opacity-70 grayscale"
                                 )}
                                 >
-                                <Label className="font-normal flex items-center space-x-2 cursor-pointer flex-grow">
+                                <Label className={cn(
+                                  "font-normal flex items-center space-x-2 flex-grow",
+                                  isPending ? "cursor-not-allowed" : "cursor-pointer"
+                                )}>
                                     <Checkbox
                                     checked={isSelected}
-                                    disabled={isLocked}
+                                    disabled={isLocked || isPending}
                                     onCheckedChange={(checked) => {
+                                        if (isPending) return;
                                         const currentValues = field.value || [];
                                         if (checked) {
                                           field.onChange([...currentValues, { id: type.id, type: type.name, count: 5 }]);
@@ -391,7 +380,7 @@ export function QuestionForm() {
                                                 field.onChange(newQuestionTypes);
                                             }}
                                             className="h-8 w-16 text-center"
-                                            disabled={!isSelected}
+                                            disabled={!isSelected || isPending}
                                         />
                                     </motion.div>
                                 )}
@@ -419,10 +408,12 @@ export function QuestionForm() {
                 )}
               />
 
-              <CardFooter className="px-0 pt-8">
+              <CardFooter className="px-0 pt-8 flex flex-col items-stretch gap-3">
                 <Button type="submit" disabled={isPending || !user} className="w-full">
-                  {isPending ? "Generating..." : "Review & Generate"}
+                  {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {isPending ? "Generating Questions..." : "Review & Generate"}
                 </Button>
+                <InlineGenerationProgress isPending={isPending} />
               </CardFooter>
             </form>
           </Form>

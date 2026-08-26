@@ -52,9 +52,22 @@ export function QuestionDisplay({ questionsData, title, subtitle }: QuestionDisp
     }
   };
 
-  const questionTypesWithContent = Object.keys(questionsData.questions).filter(
-    (type) => questionsData.questions[type] && questionsData.questions[type].length > 0
-  );
+  const ORDERED_TYPES = [
+    'MCQ',
+    'Fill in the Blanks',
+    'True/False',
+    'Very Short Answer',
+    'Short Answer',
+    'Long Answer',
+  ];
+
+  const questionTypesWithContent = Object.keys(questionsData.questions)
+    .filter((type) => questionsData.questions[type] && questionsData.questions[type].length > 0)
+    .sort((typeA, typeB) => {
+      const indexA = ORDERED_TYPES.indexOf(typeA);
+      const indexB = ORDERED_TYPES.indexOf(typeB);
+      return (indexA === -1 ? 999 : indexA) - (indexB === -1 ? 999 : indexB);
+    });
 
   if (questionTypesWithContent.length === 0) {
     return (

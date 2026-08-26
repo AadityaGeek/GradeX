@@ -38,9 +38,11 @@ Using GradeX is as simple as 1-2-3:
 
 - **Framework**: [Next.js 16](https://nextjs.org/) (with App Router)
 - **Language**: [TypeScript](https://www.typescriptlang.org/)
-- **AI Integration**: [Genkit (Google's Generative AI Toolkit)](https://firebase.google.com/docs/genkit)
+- **AI Integration**: [Genkit (Google's Generative AI Toolkit)](https://firebase.google.com/docs/genkit) & Gemini
+- **Backend & Auth**: [Firebase](https://firebase.google.com/) (Authentication & Cloud Firestore)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
 - **UI Components**: [Shadcn/UI](https://ui.shadcn.com/)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
 - **Form Management**: [React Hook Form](https://react-hook-form.com/)
 - **Schema Validation**: [Zod](https://zod.dev/)
 - **PDF Generation**: [jsPDF](https://github.com/parallax/jsPDF)

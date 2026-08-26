@@ -3,7 +3,7 @@
 import { useUser } from '@/firebase/auth/use-user';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Star, Zap, Crown, BookOpen, CalendarDays, Mail, ShieldCheck, ArrowRight } from 'lucide-react';
+import { Loader2, Star, Zap, Crown, BookOpen, CalendarDays, Mail, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { PLANS } from '@/lib/data';
@@ -81,8 +81,12 @@ export default function ProfilePage() {
           'relative overflow-hidden rounded-2xl border shadow-xl',
           planStyle.glow && `shadow-lg ${planStyle.glow}`,
         )}>
-          {/* Plan-tinted gradient banner */}
-          <div className={cn('absolute inset-x-0 top-0 h-28 bg-gradient-to-br opacity-60', planStyle.gradient)} />
+          {/* Dark top band fading to card background — two-tone effect */}
+          <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/70 via-black/30 to-transparent" />
+          {/* Plan-tinted colour wash underneath */}
+          <div className={cn('absolute inset-x-0 top-0 h-40 bg-gradient-to-br opacity-50', planStyle.gradient)} />
+          {/* Lighter bottom half */}
+          <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-card/80 to-transparent" />
 
           <div className="relative px-6 pt-10 pb-6 flex flex-col items-center text-center gap-3">
             {/* Avatar */}
@@ -180,16 +184,15 @@ export default function ProfilePage() {
 
         {/* ── Actions ── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <Button asChild size="lg" className="w-full group">
-            <Link href="/generate">
-              <Zap className="mr-2 h-4 w-4" />
+          <Button asChild size="lg" className="w-full">
+            <Link href="/generate" className="flex items-center justify-center gap-2">
+              <Zap className="h-4 w-4" />
               Generate Paper
-              <ArrowRight className="ml-auto h-4 w-4 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
             </Link>
           </Button>
           <Button asChild size="lg" variant="outline" className="w-full">
-            <Link href="/pricing">
-              <Crown className="mr-2 h-4 w-4" />
+            <Link href="/pricing" className="flex items-center justify-center gap-2">
+              <Crown className="h-4 w-4" />
               {isPremium ? 'View Plans' : 'Upgrade Plan'}
             </Link>
           </Button>
