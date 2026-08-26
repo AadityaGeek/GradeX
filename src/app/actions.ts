@@ -3,7 +3,7 @@
 
 import { generateQuestions, type GenerateQuestionsInput, type GenerateQuestionsOutput } from "@/ai/flows/generate-questions";
 import { getClassAndSubjectDetails } from "@/lib/data";
-import { questionFormSchema, type QuestionFormSchema } from "@/lib/schemas";
+import { questionFormSchema, type QuestionFormSchema, type QuestionType } from "@/lib/schemas";
 
 type ActionState = {
   success: boolean;
@@ -43,7 +43,7 @@ export async function createQuestionPaper(
       class: className,
       subject: subjectName,
       chapter: chapterTitles,
-      questionTypes: questionsToGenerate,
+      questionTypes: questionsToGenerate.map(({ type, count }) => ({ type, count })),
     };
 
     const aiOutput = await generateQuestions(aiInput);

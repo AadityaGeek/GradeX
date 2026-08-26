@@ -151,24 +151,58 @@ export default function Home() {
         <section id="how-it-works" className="py-16 md:py-24 bg-background">
             <div className="container mx-auto px-4 text-center">
                 <h2 className="text-3xl md:text-4xl font-bold">Get Your Questions in 3 Simple Steps</h2>
-                <div className="relative mt-12 max-w-4xl mx-auto">
-                    <div className="absolute left-1/2 top-4 hidden h-[calc(100%-2rem)] w-0.5 -translate-x-1/2 bg-border md:block" aria-hidden="true"></div>
-                    <div className="grid grid-cols-1 gap-y-12 md:gap-y-16">
+                <div className="mt-12 max-w-4xl mx-auto">
+                    {/* Mobile: simple vertical list */}
+                    <ol className="flex flex-col gap-6 md:hidden">
                         {steps.map((step, index) => (
-                           <div key={index} className="relative flex flex-col items-center md:flex-row md:items-start md:justify-between">
-                                <div className={`flex flex-col items-center md:flex-row md:w-1/2 ${index % 2 === 0 ? 'md:order-1' : 'md:order-3 md:justify-end'}`}>
-                                    <div className="flex-shrink-0 order-1 md:order-none w-12 h-12 bg-primary rounded-full text-primary-foreground font-bold text-xl z-10 flex items-center justify-center md:absolute md:left-1/2 md:-translate-x-1/2">
-                                        {index + 1}
-                                    </div>
-                                    <div className={`p-6 order-2 md:order-none bg-card rounded-lg shadow-md border w-full text-center md:w-[calc(100%-4rem)] transition-all hover:shadow-lg hover:border-primary hover:-translate-y-0.5 ${index % 2 === 0 ? 'md:text-left' : 'md:text-right'}`}>
-                                        <h3 className="text-xl font-semibold">{step.title}</h3>
-                                        <p className="mt-2 text-muted-foreground">{step.description}</p>
-                                    </div>
+                            <li key={index} className="flex gap-4 items-start text-left">
+                                <div className="flex-shrink-0 w-10 h-10 bg-primary rounded-full text-primary-foreground font-bold text-base flex items-center justify-center shadow-md">
+                                    {index + 1}
                                 </div>
-                                <div className="hidden md:block md:w-1/2 md:order-2"></div>
-                           </div>
+                                <div className="flex-1 p-4 bg-card rounded-xl border shadow-sm">
+                                    <h3 className="text-lg font-semibold">{step.title}</h3>
+                                    <p className="mt-1 text-muted-foreground text-sm">{step.description}</p>
+                                </div>
+                            </li>
                         ))}
-                    </div>
+                    </ol>
+
+                    {/* Desktop: alternating zigzag timeline */}
+                    <ol className="hidden md:block relative">
+                        {/* Centered vertical connecting line */}
+                        <div className="absolute left-1/2 -translate-x-1/2 top-6 bottom-6 w-0.5 bg-border" aria-hidden="true" />
+                        <div className="flex flex-col gap-12">
+                            {steps.map((step, index) => {
+                                const isLeft = index % 2 === 0;
+                                return (
+                                    <li key={index} className="relative grid grid-cols-[1fr_auto_1fr] items-center gap-6">
+                                        {/* Left slot */}
+                                        {isLeft ? (
+                                            <div className="p-6 bg-card rounded-xl border shadow-sm text-right transition-all hover:shadow-lg hover:border-primary hover:-translate-y-0.5">
+                                                <h3 className="text-xl font-semibold">{step.title}</h3>
+                                                <p className="mt-2 text-muted-foreground">{step.description}</p>
+                                            </div>
+                                        ) : (
+                                            <div />
+                                        )}
+                                        {/* Center circle */}
+                                        <div className="z-10 w-12 h-12 bg-primary rounded-full text-primary-foreground font-bold text-xl flex items-center justify-center shadow-md ring-4 ring-background">
+                                            {index + 1}
+                                        </div>
+                                        {/* Right slot */}
+                                        {!isLeft ? (
+                                            <div className="p-6 bg-card rounded-xl border shadow-sm text-left transition-all hover:shadow-lg hover:border-primary hover:-translate-y-0.5">
+                                                <h3 className="text-xl font-semibold">{step.title}</h3>
+                                                <p className="mt-2 text-muted-foreground">{step.description}</p>
+                                            </div>
+                                        ) : (
+                                            <div />
+                                        )}
+                                    </li>
+                                );
+                            })}
+                        </div>
+                    </ol>
                 </div>
             </div>
         </section>

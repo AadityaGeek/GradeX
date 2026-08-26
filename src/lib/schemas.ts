@@ -11,9 +11,9 @@ export const QUESTION_TYPES = [
 ] as const;
 
 
-const questionTypeNames = QUESTION_TYPES.map(t => t.name);
+const questionTypeNames = QUESTION_TYPES.map(t => t.name) as [typeof QUESTION_TYPES[number]['name'], ...typeof QUESTION_TYPES[number]['name'][]];
 
-export const QuestionTypeSchema = z.enum(questionTypeNames as [string, ...string[]]);
+export const QuestionTypeSchema = z.enum(questionTypeNames);
 export type QuestionType = z.infer<typeof QuestionTypeSchema>;
 
 const questionTypeCountSchema = z.object({
