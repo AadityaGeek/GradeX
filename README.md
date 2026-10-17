@@ -1,7 +1,7 @@
 
 # GradeX - AI-Powered Question Paper Generator
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: All Rights Reserved](https://img.shields.io/badge/License-All_Rights_Reserved-red.svg)](#-license)
 
 GradeX is an intelligent web application designed to revolutionize how students and educators prepare for and create exams. By harnessing the power of generative AI, it automates the creation of high-quality, customized question papers based on specific curriculum requirements. This tool saves valuable time for educators and provides students with a powerful resource for targeted revision.
 
@@ -117,4 +117,6 @@ Contributions are welcome! If you have suggestions for improvements, please feel
 
 ## 📄 License
 
-This project is distributed under the MIT License. See `LICENSE` for more information.
+Copyright © 2026 Aaditya Kumar. All rights reserved.
+
+This project is made publicly available for **viewing and portfolio demonstration purposes only**. You may not copy, duplicate, modify, distribute, or use this code in any project without explicit prior written consent. See [LICENSE](file:///e:/Projects/Completed%20Projects/GradeX/LICENSE) for full details.
