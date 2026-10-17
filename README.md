@@ -5,6 +5,10 @@
 
 GradeX is an intelligent web application designed to revolutionize how students and educators prepare for and create exams. By harnessing the power of generative AI, it automates the creation of high-quality, customized question papers based on specific curriculum requirements. This tool saves valuable time for educators and provides students with a powerful resource for targeted revision.
 
+## 🎬 Demo
+
+https://github.com/user-attachments/assets/d47e34da-d459-43b8-8e9a-5445496fd892
+
 ## ✨ Key Features
 
 - **🧠 Intelligent Content Generation**: Leverages advanced AI to generate questions and answers that are contextually relevant and accurate.
