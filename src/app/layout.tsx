@@ -51,7 +51,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body className={`${poppins.className} antialiased min-h-screen bg-background`}>
         <FirebaseProvider>
           <Header />

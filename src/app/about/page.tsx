@@ -17,8 +17,7 @@ export default function AboutPage() {
             src="/images/res/hero-about.jpg"
             alt="Students studying together"
             fill={true}
-            objectFit="cover"
-            className="absolute inset-0"
+            className="absolute inset-0 object-cover"
             priority={true}
             data-ai-hint="happy diverse students"
           />

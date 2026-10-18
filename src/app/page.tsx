@@ -72,8 +72,7 @@ export default function Home() {
                 src="/images/hero-background.jpg"
                 alt="Neural Network"
                 fill={true}
-                objectFit="cover"
-                className="absolute inset-0"
+                className="absolute inset-0 object-cover"
                 priority={true}
                 data-ai-hint="futuristic education interface"
             />

@@ -27,42 +27,66 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/t
 import { cn } from "@/lib/utils";
 
 const GENERATION_STAGES = [
-  "Analyzing curriculum & chapters...",
-  "Formulating exam-standard questions...",
-  "Writing solutions & explanations...",
-  "Finalizing question paper...",
+  { threshold: 0, label: "Analyzing curriculum & chapters..." },
+  { threshold: 28, label: "Formulating exam-standard questions..." },
+  { threshold: 60, label: "Writing solutions & explanations..." },
+  { threshold: 84, label: "Polishing & formatting question paper..." },
 ];
 
 function InlineGenerationProgress({ isPending }: { isPending: boolean }) {
-  const [stageIndex, setStageIndex] = React.useState(0);
-  const [progress, setProgress] = React.useState(18);
+  const [progress, setProgress] = React.useState(5);
 
   React.useEffect(() => {
     if (!isPending) {
-      setStageIndex(0);
-      setProgress(18);
+      setProgress(5);
       return;
     }
 
-    const stageInterval = setInterval(() => {
-      setStageIndex((prev) => (prev < GENERATION_STAGES.length - 1 ? prev + 1 : prev));
-    }, 2800);
-
+    // Dynamic asymptotic progress ticker: decelerates smoothly but NEVER stalls
     const progressInterval = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 92) return prev;
-        const jump = Math.floor(Math.random() * 7) + 3;
-        return Math.min(prev + jump, 92);
+        // Initial phase (0-30%): rapid initial feedback
+        if (prev < 30) {
+          const jump = Math.random() * 3 + 2.5; // +2.5% to +5.5%
+          return Math.min(prev + jump, 30);
+        }
+        // Middle phase (30-65%): question drafting
+        if (prev < 65) {
+          const jump = Math.random() * 2 + 1.2; // +1.2% to +3.2%
+          return Math.min(prev + jump, 65);
+        }
+        // Late-mid phase (65-84%): solutions & rubrics
+        if (prev < 84) {
+          const jump = Math.random() * 1.2 + 0.6; // +0.6% to +1.8%
+          return Math.min(prev + jump, 84);
+        }
+        // Finalizing phase (84-94%): steady crawl
+        if (prev < 94) {
+          const jump = Math.random() * 0.5 + 0.25; // +0.25% to +0.75%
+          return Math.min(prev + jump, 94);
+        }
+        // Asymptotic tail (94-99%): micro-increments so it never appears frozen
+        if (prev < 99) {
+          const jump = Math.random() * 0.15 + 0.08; // +0.08% to +0.23%
+          return Math.min(prev + jump, 99);
+        }
+        return prev;
       });
-    }, 500);
+    }, 450);
 
     return () => {
-      clearInterval(stageInterval);
       clearInterval(progressInterval);
     };
   }, [isPending]);
 
   if (!isPending) return null;
+
+  const currentStage =
+    GENERATION_STAGES.slice()
+      .reverse()
+      .find((stage) => progress >= stage.threshold)?.label ?? GENERATION_STAGES[0].label;
+
+  const displayPercent = Math.min(Math.round(progress), 99);
 
   return (
     <motion.div
@@ -74,9 +98,9 @@ function InlineGenerationProgress({ isPending }: { isPending: boolean }) {
       <div className="flex items-center justify-between text-muted-foreground">
         <span className="flex items-center gap-1.5 font-medium text-foreground">
           <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
-          {GENERATION_STAGES[stageIndex]}
+          {currentStage}
         </span>
-        <span className="font-semibold tabular-nums text-primary">{progress}%</span>
+        <span className="font-semibold tabular-nums text-primary">{displayPercent}%</span>
       </div>
       <div className="h-1.5 w-full overflow-hidden rounded-full bg-secondary">
         <div
