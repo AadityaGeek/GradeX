@@ -77,6 +77,7 @@ Follow these steps to get the project running on your local machine.
     Create a `.env` file in the root of your project and add your Google AI API key.
     ```env
     GEMINI_API_KEY="YOUR_API_KEY_HERE"
+    GEMINI_MODEL="googleai/gemini-3.8-flash"
     GENERATE_QUESTIONS_PROMPT="YOUR_CUSTOM_PROMPT"
     ```
 
